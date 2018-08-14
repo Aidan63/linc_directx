@@ -56,6 +56,20 @@ extern abstract D3D11_BIND_FLAG(NATIVE_D3D11_BIND_FLAG)
 @:native('D3D11_BIND_FLAG')
 private extern class NATIVE_D3D11_BIND_FLAG {}
 
+// D3D11_CPU_ACCESS_FLAG
+
+@:unreflective
+@:enum
+extern abstract D3D11_CPU_ACCESS_FLAG(NATIVE_D3D11_CPU_ACCESS_FLAG)
+{
+    @:native('D3D11_CPU_ACCESS_WRITE') var WRITE;
+    @:native('D3D11_CPU_ACCESS_READ') var READ;
+}
+
+@:unreflective
+@:native('D3D11_CPU_ACCESS_FLAG')
+private extern class NATIVE_D3D11_CPU_ACCESS_FLAG {}
+
 // Static functions
 
 @:unreflective
