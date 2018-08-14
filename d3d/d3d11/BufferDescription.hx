@@ -1,5 +1,6 @@
 package d3d.d3d11;
 
+import d3d.d3d11.D3D11.D3D11_CPU_ACCESS_FLAG;
 import d3d.d3d11.D3D11.D3D11_BIND_FLAG;
 import d3d.d3d11.D3D11.D3D11_USAGE;
 
@@ -25,7 +26,7 @@ extern class BufferDescription
     var bindFlags : D3D11_BIND_FLAG;
 
     @:native('CPUAccessFlags')
-    var cpuAccessFlags : Int;
+    var cpuAccessFlags : D3D11_CPU_ACCESS_FLAG;
 
     @:native('MiscFlags')
     var miscFlags : Int;
