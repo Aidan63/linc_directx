@@ -1,12 +1,15 @@
 package d3d.d3d11;
 
 import com.IUnknown;
+import cpp.Star;
+
+typedef Texture2D = Star<Texture2DRef>;
 
 @:keep
 @:unreflective
-@:native("::cpp::Pointer<ID3D11Texture2D>")
+@:native("ID3D11Texture2D")
 @:include("d3d11.h")
-extern class Texture2D extends IUnknown
+private extern class Texture2DRef extends IUnknown
 {
     //
 }

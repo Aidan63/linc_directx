@@ -1,10 +1,10 @@
 package dxgi;
 
+import cpp.Star;
+
 // DXGI_SWAP_EFFECT enum
 
-@:unreflective
-@:enum
-extern abstract DXGI_SWAP_EFFECT(NATIVE_DXGI_SWAP_EFFECT)
+@:enum extern abstract DXGI_SWAP_EFFECT(NATIVE_DXGI_SWAP_EFFECT)
 {
     @:native('DXGI_SWAP_EFFECT_DISCARD')         var DISCARD;
     @:native('DXGI_SWAP_EFFECT_SEQUENTIAL')      var SEQUENTIAL;
@@ -12,15 +12,12 @@ extern abstract DXGI_SWAP_EFFECT(NATIVE_DXGI_SWAP_EFFECT)
     @:native('DXGI_SWAP_EFFECT_FLIP_DISCARD')    var FLIP_DISCARD;
 }
 
-@:unreflective
-@:native('DXGI_SWAP_EFFECT')
+@:native('::cpp::Struct<DXGI_SWAP_EFFECT, ::cpp::EnumHandler>')
 private extern class NATIVE_DXGI_SWAP_EFFECT {}
 
 // DXGI_FORMAT enum
 
-@:unreflective
-@:enum
-extern abstract DXGI_FORMAT(NATIVE_DXGI_FORMAT)
+@:enum extern abstract DXGI_FORMAT(NATIVE_DXGI_FORMAT)
 {
     @:native('DXGI_FORMAT_UNKNOWN')                    var UNKNOWN;
     @:native('DXGI_FORMAT_R32G32B32A32_TYPELESS')      var R32G32B32A32_TYPELESS;
@@ -144,8 +141,7 @@ extern abstract DXGI_FORMAT(NATIVE_DXGI_FORMAT)
     @:native('DXGI_FORMAT_FORCE_UINT')                 var FORCE_UINT;
 }
 
-@:unreflective
-@:native('DXGI_FORMAT')
+@:native('::cpp::Struct<DXGI_FORMAT, ::cpp::EnumHandler>')
 private extern class NATIVE_DXGI_FORMAT {}
 
 // DXGI class with constants and static functions
@@ -162,8 +158,8 @@ extern class DXGI
     inline static var USAGE_DISCARD_ON_PRESENT   = 0x00000200;
     inline static var USAGE_UNORDERED_ACCESS     = 0x00000400;
 
-    inline static function createFactory(_factory : Factory) : Int
+    inline static function createFactory(_factory : cpp.Star<Factory>) : Int
     {
-        return untyped __cpp__('CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&{0})', _factory);
+        return untyped __cpp__('CreateDXGIFactory(__uuidof(IDXGIFactory), (void**){0})', _factory);
     }
 }

@@ -1,12 +1,16 @@
 package dxgi;
 
 import com.IUnknown;
+import cpp.Star;
+
+typedef Output = Star<OutputRef>;
 
 @:keep
 @:unreflective
-@:native("::cpp::Pointer<IDXGIOutput>")
+@:structAccess
+@:native("IDXGIOutput")
 @:include("dxgi.h")
-extern class Output extends IUnknown
+private extern class OutputRef extends IUnknown
 {
     //
 }

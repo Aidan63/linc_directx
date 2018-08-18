@@ -1,18 +1,20 @@
 package d3d.compiler;
 
 import com.IUnknown;
+import cpp.Star;
+import cpp.SizeT;
 
-@:include("D3Dcompiler.h")
-@:native("::cpp::Pointer<ID3DBlob>")
-extern class Blob extends IUnknown
+typedef Blob = Star<BlobRef>;
+
+@:unreflective
+@:structAccess
+@:include("D3Dcommon.h")
+@:native("ID3DBlob")
+extern class BlobRef extends IUnknown
 {
-    inline function getBufferPointer() : cpp.Pointer<cpp.Void>
-    {
-        return cast untyped __cpp__('{0}->ptr->GetBufferPointer()', this);
-    }
+    @:native('GetBufferPointer')
+    function getBufferPointer() : cpp.Star<cpp.Void>;
 
-    inline function getBufferSize() : cpp.SizeT
-    {
-        return untyped __cpp__('{0}->ptr->GetBufferSize()', this);
-    }
+    @:native('GetBufferSize')
+    function getBufferSize() : cpp.SizeT;
 }

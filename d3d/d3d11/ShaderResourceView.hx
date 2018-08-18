@@ -1,12 +1,15 @@
 package d3d.d3d11;
 
 import com.IUnknown;
+import cpp.Star;
+
+typedef ShaderResourceView = Star<ShaderResourceViewRef>;
 
 @:keep
 @:unreflective
-@:native("::cpp::Pointer<ID3D11ShaderResourceView>")
+@:native("ID3D11ShaderResourceView")
 @:include("d3d11.h")
-extern class ShaderResourceView extends IUnknown
+private extern class ShaderResourceViewRef extends IUnknown
 {
     //
 }

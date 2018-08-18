@@ -1,12 +1,15 @@
 package d3d.d3d11;
 
 import com.IUnknown;
+import cpp.Star;
+
+typedef InputLayout = Star<InputLayoutRef>;
 
 @:keep
 @:unreflective
-@:native("::cpp::Pointer<ID3D11InputLayout>")
+@:native("ID3D11InputLayout")
 @:include("d3d11.h")
-extern class InputLayout extends IUnknown
+private extern class InputLayoutRef extends IUnknown
 {
     //
 }

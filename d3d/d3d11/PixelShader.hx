@@ -1,12 +1,15 @@
 package d3d.d3d11;
 
 import com.IUnknown;
+import cpp.Star;
+
+typedef PixelShader = Star<PixelShaderRef>;
 
 @:keep
 @:unreflective
-@:native("::cpp::Pointer<ID3D11PixelShader>")
+@:native("ID3D11PixelShader")
 @:include("d3d11.h")
-extern class PixelShader extends IUnknown
+private extern class PixelShaderRef extends IUnknown
 {
     //
 }

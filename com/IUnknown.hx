@@ -1,12 +1,15 @@
 package com;
 
+import cpp.Star;
+
+typedef IUnknown = Star<IUnknownRef>;
+
 @:unreflective
-@:native("::cpp::Pointer<IUnknown>")
+@:structAccess
+@:native("IUnknown")
 @:include("unknwn.h")
-extern class IUnknown
+private extern class IUnknownRef
 {
-    inline function release() : Void
-    {
-        untyped __cpp__('{0}->ptr->Release()', this);
-    }
+    @:native('Release')
+    function release() : Void;
 }
