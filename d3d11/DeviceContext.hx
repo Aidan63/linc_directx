@@ -1,8 +1,9 @@
-package d3d.d3d11;
+package d3d11;
 
+import d3dcommon.D3DCommon;
+import d3d11.D3D11;
+import d3d11.resources.*;
 import dxgi.DXGI;
-import d3d.D3DCommon;
-import d3d.d3d11.D3D11;
 import com.IUnknown;
 import cpp.Star;
 

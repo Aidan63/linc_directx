@@ -1,4 +1,4 @@
-package d3d.d3d11;
+package d3d11;
 
 import com.IUnknown;
 import cpp.Star;

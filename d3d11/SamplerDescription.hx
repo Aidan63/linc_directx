@@ -1,8 +1,8 @@
-package d3d.d3d11;
+package d3d11;
 
-import d3d.d3d11.D3D11.D3D11_FILTER;
-import d3d.d3d11.D3D11.D3D11_TEXTURE_ADDRESS_MODE;
-import d3d.d3d11.D3D11.D3D11_COMPARISON_FUNC;
+import d3d11.D3D11.D3D11_FILTER;
+import d3d11.D3D11.D3D11_TEXTURE_ADDRESS_MODE;
+import d3d11.D3D11.D3D11_COMPARISON_FUNC;
 
 @:unreflective
 @:structAccess

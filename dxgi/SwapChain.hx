@@ -1,7 +1,7 @@
 package dxgi;
 
 import dxgi.DXGI.DXGI_FORMAT;
-import d3d.d3d11.Texture2D;
+import d3d11.resources.Texture2D;
 import com.IUnknown;
 import cpp.Star;
 

@@ -1,7 +1,7 @@
-package d3d.d3d11;
+package d3d11;
 
-import d3d.d3d11.D3D11.D3D11_CULL_MODE;
-import d3d.d3d11.D3D11.D3D11_FILL_MODE;
+import d3d11.D3D11.D3D11_CULL_MODE;
+import d3d11.D3D11.D3D11_FILL_MODE;
 
 @:unreflective
 @:structAccess

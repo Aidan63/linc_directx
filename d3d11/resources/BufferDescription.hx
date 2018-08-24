@@ -1,8 +1,8 @@
-package d3d.d3d11;
+package d3d11.resources;
 
-import d3d.d3d11.D3D11.D3D11_CPU_ACCESS_FLAG;
-import d3d.d3d11.D3D11.D3D11_BIND_FLAG;
-import d3d.d3d11.D3D11.D3D11_USAGE;
+import d3d11.D3D11.D3D11_CPU_ACCESS_FLAG;
+import d3d11.D3D11.D3D11_BIND_FLAG;
+import d3d11.D3D11.D3D11_USAGE;
 
 @:unreflective
 @:structAccess

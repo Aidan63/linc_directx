@@ -1,4 +1,4 @@
-package d3d;
+package d3dcommon;
 
 // D3D_FEATURE_LEVEL enum
 

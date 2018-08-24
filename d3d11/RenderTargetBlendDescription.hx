@@ -1,7 +1,7 @@
-package d3d.d3d11;
+package d3d11;
 
 import cpp.Pointer;
-import d3d.d3d11.D3D11;
+import d3d11.D3D11;
 
 @:unreflective
 @:structAccess

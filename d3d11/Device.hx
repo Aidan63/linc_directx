@@ -1,6 +1,7 @@
-package d3d.d3d11;
+package d3d11;
 
-import d3d.d3d11.InputElementDescription;
+import d3d11.resources.*;
+import d3d11.InputElementDescription;
 import com.IUnknown;
 import cpp.Star;
 
