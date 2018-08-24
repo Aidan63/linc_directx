@@ -32,10 +32,8 @@ private extern class DeviceContextRef extends IUnknownRef
         untyped __cpp__('{0}->IASetVertexBuffers({1}, 1, (ID3D11Buffer**)&{2}, (UINT*)&{3}, (UINT*)&{4})', this, _startSlot, _vertexBuffer, _stride, _offset);
     }
 
-    inline function iaSetIndexBuffer(_indexBuffer : Buffer, _format : DXGI_FORMAT, _offset : Int) : Void
-    {
-        untyped __cpp__('{0}->IASetIndexBuffer({1}, {2}, {3})', this, _indexBuffer, _format, _offset);
-    }
+    @:native('IASetIndexBuffer')
+    function iaSetIndexBuffer(_indexBuffer : Buffer, _format : DXGI_FORMAT, _offset : Int) : Void;
 
     inline function omSetRenderTargets(_views : RenderTargetView) : Void
     {
@@ -57,15 +55,11 @@ private extern class DeviceContextRef extends IUnknownRef
         untyped __cpp__('{0}->PSSetConstantBuffers({1}, 1, (ID3D11Buffer**)&{2})', this, _startSlot, _constantBuffer);
     }
 
-    inline function vsSetShader(_shader : VertexShader) : Void
-    {
-        untyped __cpp__('{0}->VSSetShader((ID3D11VertexShader*){1}, 0, 0)', this, _shader);
-    }
+    @:native('VSSetShader')
+    function vsSetShader(_shader : VertexShader, _classInstances : Star<ClassInstance>, _numInstances : Int) : Void;
 
-    inline function psSetShader(_shader : PixelShader) : Void
-    {
-        untyped __cpp__('{0}->PSSetShader((ID3D11PixelShader*){1}, 0, 0)', this, _shader);
-    }
+    @:native('PSSetShader')
+    function psSetShader(_shader : PixelShader, _classInstances : Star<ClassInstance>, _numInstances : Int) : Void;
 
     inline function psSetShaderResource(_slot : Int, _resouce : ShaderResourceView) : Void
     {
@@ -83,10 +77,8 @@ private extern class DeviceContextRef extends IUnknownRef
     @:native('Unmap')
     function unmap(_resource : Buffer, _subresource : Int) : Void;
 
-    inline function rsSetState(_state : RasterizerState) : Void
-    {
-        untyped __cpp__('{0}->RSSetState({1})', this, _state);
-    }
+    @:native('RSSetState')
+    function rsSetState(_state : RasterizerState) : Void;
 
     inline function omSetBlendState(_blendState : BlendState, _blendFactor : Array<cpp.Float32>, _sampleMask : Int) : Void
     {
