@@ -5,6 +5,24 @@ import dxgi.SwapChainDescription;
 import dxgi.SwapChain;
 import cpp.Star;
 
+// D3D11_RTV_DIMENSION enum
+
+@:enum extern abstract D3D11_RTV_DIMENSION(NATIVE_D3D11_RTV_DIMENSION)
+{
+    @:native('D3D11_RTV_DIMENSION_UNKNOWN')          var UNKNOWN;
+    @:native('D3D11_RTV_DIMENSION_BUFFER')           var BUFFER;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE1D')        var TEXTURE1D;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE1DARRAY')   var TEXTURE1DARRAY;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE2D')        var TEXTURE2D;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE2DARRAY')   var TEXTURE2DARRAY;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE2DMS')      var TEXTURE2DMS;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY') var TEXTURE2DMSARRAY;
+    @:native('D3D11_RTV_DIMENSION_TEXTURE3D')        var TEXTURE3D;
+}
+
+@:native('::cpp::Struct<D3D11_RTV_DIMENSION, ::cpp::EnumHandler>')
+private extern class NATIVE_D3D11_RTV_DIMENSION {}
+
 // D3D11_COMPARISON_FUNC enum
 
 @:enum extern abstract D3D11_COMPARISON_FUNC(NATIVE_D3D11_COMPARISON_FUNC)

@@ -4,13 +4,13 @@ import d3d11.resources.Resource;
 import com.IUnknown;
 import cpp.Star;
 
-typedef Texture2D = Star<Texture2DRef>;
+typedef Resource = Star<ResourceRef>;
 
 @:keep
 @:unreflective
-@:native("ID3D11Texture2D")
+@:native("ID3D11Resource")
 @:include("d3d11.h")
-extern class Texture2DRef extends ResourceRef
+extern class ResourceRef extends IUnknownRef
 {
     //
 }

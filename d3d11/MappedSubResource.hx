@@ -1,4 +1,4 @@
-package d3d11.resources;
+package d3d11;
 
 @:unreflective
 @:structAccess

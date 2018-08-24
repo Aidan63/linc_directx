@@ -19,15 +19,11 @@ private extern class DeviceRef extends IUnknownRef
     @:native('CreateBuffer')
     function createBuffer(_description : Star<BufferDescription>, _initialData : Star<SubResourceData>, _buffer : Star<Buffer>) : Int;
 
-    inline function createRenderTargetView(_resource : Texture2D, _view : Star<RenderTargetView>) : Int
-    {
-        return untyped __cpp__('{0}->CreateRenderTargetView({1}, nullptr, (ID3D11RenderTargetView**){2})', this, _resource, _view);
-    }
+    @:native('CreateRenderTargetView')
+    function createRenderTargetView(_resource : Resource, _description : Star<RenderTargetViewDescription>, _view : Star<RenderTargetView>) : Int;
 
-    inline function createShaderResourceView(_resource : Texture2D, _view : Star<ShaderResourceView>) : Int
-    {
-        return untyped __cpp__('{0}->CreateShaderResourceView({1}, nullptr, (ID3D11ShaderResourceView**){2})', this, _resource, _view);
-    }
+    @:native('CreateShaderResourceView')
+    function createShaderResourceView(_resource : Resource, _description : Star<ShaderResourceViewDescription>, _view : Star<ShaderResourceView>) : Int;
     
     inline function createInputLayout(_description : InputElementDescriptionArray, _shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _inputLayout : Star<InputLayout>) : Int
     {
