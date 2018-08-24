@@ -13,6 +13,11 @@ typedef Device = Star<DeviceRef>;
 @:include("d3d11.h")
 private extern class DeviceRef extends IUnknownRef
 {
+    inline function createInputLayout(_description : InputElementDescriptionArray, _shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _inputLayout : Star<InputLayout>) : Int
+    {
+        return untyped __cpp__('{0}->CreateInputLayout({1}.data(), {1}.size(), {2}, {3}, (ID3D11InputLayout**){4})', this, _description, _shaderBytecode, _bytecodeLength, _inputLayout);
+    }
+
     @:native('CreateTexture2D')
     function createTexture2D(_description : Star<Texture2DDescription>, _initialData : Star<SubResourceData>, _texture2D : Star<Texture2D>) : Int;
 
@@ -24,21 +29,12 @@ private extern class DeviceRef extends IUnknownRef
 
     @:native('CreateShaderResourceView')
     function createShaderResourceView(_resource : Resource, _description : Star<ShaderResourceViewDescription>, _view : Star<ShaderResourceView>) : Int;
-    
-    inline function createInputLayout(_description : InputElementDescriptionArray, _shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _inputLayout : Star<InputLayout>) : Int
-    {
-        return untyped __cpp__('{0}->CreateInputLayout({1}.data(), {1}.size(), {2}, {3}, (ID3D11InputLayout**){4})', this, _description, _shaderBytecode, _bytecodeLength, _inputLayout);
-    }
 
-    inline function createVertexShader(_shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _vertexShader : Star<VertexShader>) : Int
-    {
-        return untyped __cpp__('{0}->CreateVertexShader({1}, {2}, nullptr, (ID3D11VertexShader**){3})', this, _shaderBytecode, _bytecodeLength, _vertexShader);
-    }
+    @:native('CreateVertexShader')
+    function createVertexShader(_shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _classLinkage : ClassLinkage, _vertexShader : Star<VertexShader>) : Int;
 
-    inline function createPixelShader(_shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _pixelShader : Star<PixelShader>) : Int
-    {
-        return untyped __cpp__('{0}->CreatePixelShader({1}, {2}, nullptr, (ID3D11PixelShader**){3})', this, _shaderBytecode, _bytecodeLength, _pixelShader);
-    }
+    @:native('CreatePixelShader')
+    function createPixelShader(_shaderBytecode : Star<cpp.Void>, _bytecodeLength : Int, _classLinkage : ClassLinkage, _pixelShader : Star<PixelShader>) : Int;
 
     @:native('CreateRasterizerState')
     function createRasterizerState(_description : Star<RasterizerDescription>, _state : Star<RasterizerState>) : Int;
