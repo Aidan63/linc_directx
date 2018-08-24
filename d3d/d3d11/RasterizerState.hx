@@ -9,7 +9,7 @@ typedef RasterizerState = Star<RasterizerStateRef>;
 @:unreflective
 @:native("ID3D11RasterizerState")
 @:include("d3d11.h")
-private extern class RasterizerStateRef extends IUnknown
+private extern class RasterizerStateRef extends IUnknownRef
 {
     //
 }

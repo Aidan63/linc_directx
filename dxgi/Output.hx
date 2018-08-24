@@ -10,7 +10,7 @@ typedef Output = Star<OutputRef>;
 @:structAccess
 @:native("IDXGIOutput")
 @:include("dxgi.h")
-private extern class OutputRef extends IUnknown
+private extern class OutputRef extends IUnknownRef
 {
     //
 }

@@ -158,7 +158,7 @@ extern class DXGI
     inline static var USAGE_DISCARD_ON_PRESENT   = 0x00000200;
     inline static var USAGE_UNORDERED_ACCESS     = 0x00000400;
 
-    inline static function createFactory(_factory : cpp.Star<Factory>) : Int
+    inline static function createFactory(_factory : Star<Factory>) : Int
     {
         return untyped __cpp__('CreateDXGIFactory(__uuidof(IDXGIFactory), (void**){0})', _factory);
     }

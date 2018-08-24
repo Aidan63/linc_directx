@@ -9,7 +9,7 @@ typedef SamplerState = Star<SamplerStateRef>;
 @:unreflective
 @:native("ID3D11SamplerState")
 @:include("d3d11.h")
-private extern class SamplerStateRef extends IUnknown
+private extern class SamplerStateRef extends IUnknownRef
 {
     //
 }

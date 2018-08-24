@@ -9,7 +9,7 @@ typedef VertexShader = Star<VertexShaderRef>;
 @:unreflective
 @:native("ID3D11VertexShader")
 @:include("d3d11.h")
-private extern class VertexShaderRef extends IUnknown
+private extern class VertexShaderRef extends IUnknownRef
 {
     //
 }

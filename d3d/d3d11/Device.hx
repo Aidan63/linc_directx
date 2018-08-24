@@ -1,30 +1,22 @@
 package d3d.d3d11;
 
-import d3d.d3d11.InputElementDescription.InputElementDescriptionArray;
+import d3d.d3d11.InputElementDescription;
 import com.IUnknown;
 import cpp.Star;
 
 typedef Device = Star<DeviceRef>;
 
 @:unreflective
+@:structAccess
 @:native("ID3D11Device")
 @:include("d3d11.h")
-private extern class DeviceRef extends IUnknown
+private extern class DeviceRef extends IUnknownRef
 {
-    inline function createTexture2D(_description : Texture2DDesc, _initialData : SubResourceData, _texture2D : Star<Texture2D>) : Int
-    {
-        return untyped __cpp__('{0}->CreateTexture2D(&{1}, &{2}, (ID3D11Texture2D**){3})', this, _description, _initialData, _texture2D);
-    }
+    @:native('CreateTexture2D')
+    function createTexture2D(_description : Star<Texture2DDescription>, _initialData : Star<SubResourceData>, _texture2D : Star<Texture2D>) : Int;
 
-    inline function createBuffer(_description : BufferDescription, _buffer : Star<Buffer>) : Int
-    {
-        return untyped __cpp__('{0}->CreateBuffer(&{1}, nullptr, (ID3D11Buffer**){2})', this, _description, _buffer);
-    }
-
-    inline function createBufferData(_description : BufferDescription, _initialData : SubResourceData, _buffer : Star<Buffer>) : Int
-    {
-        return untyped __cpp__('{0}->CreateBuffer(&{1}, &{2}, (ID3D11Buffer**){3})', this, _description, _initialData, _buffer);
-    }
+    @:native('CreateBuffer')
+    function createBuffer(_description : Star<BufferDescription>, _initialData : Star<SubResourceData>, _buffer : Star<Buffer>) : Int;
 
     inline function createRenderTargetView(_resource : Texture2D, _view : Star<RenderTargetView>) : Int
     {
@@ -51,18 +43,12 @@ private extern class DeviceRef extends IUnknown
         return untyped __cpp__('{0}->CreatePixelShader({1}, {2}, nullptr, (ID3D11PixelShader**){3})', this, _shaderBytecode, _bytecodeLength, _pixelShader);
     }
 
-    inline function createRasterizerState(_description : RasterizerDescription, _state : Star<RasterizerState>) : Int
-    {
-        return untyped __cpp__('{0}->CreateRasterizerState(&{1}, (ID3D11RasterizerState**){2})', this, _description, _state);
-    }
+    @:native('CreateRasterizerState')
+    function createRasterizerState(_description : Star<RasterizerDescription>, _state : Star<RasterizerState>) : Int;
 
-    inline function createBlendState(_blendStateDescription : BlendDescription, _blendState : Star<BlendState>) : Int
-    {
-        return untyped __cpp__('{0}->CreateBlendState(&{1}, (ID3D11BlendState**){2})', this, _blendStateDescription, _blendState);
-    }
+    @:native('CreateBlendState')
+    function createBlendState(_blendStateDescription : Star<BlendDescription>, _blendState : Star<BlendState>) : Int;
 
-    inline function createSamplerState(_samplerDescription : SamplerDescription, _samplerState : Star<SamplerState>) : Int
-    {
-        return untyped __cpp__('{0}->CreateSamplerState(&{1}, (ID3D11SamplerState**){2})', this, _samplerDescription, _samplerState);
-    }
+    @:native('CreateSamplerState')
+    function createSamplerState(_samplerDescription : Star<SamplerDescription>, _samplerState : Star<SamplerState>) : Int;
 }

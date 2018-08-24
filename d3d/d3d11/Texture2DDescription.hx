@@ -9,10 +9,10 @@ import d3d.d3d11.D3D11.D3D11_BIND_FLAG;
 @:structAccess
 @:native("D3D11_TEXTURE2D_DESC")
 @:include("d3d11.h")
-extern class Texture2DDesc
+extern class Texture2DDescription
 {
     @:native('D3D11_TEXTURE2D_DESC')
-    static function create() : Texture2DDesc;
+    static function create() : Texture2DDescription;
 
     @:native('Width')
     var width : Int;

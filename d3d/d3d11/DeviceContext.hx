@@ -1,37 +1,30 @@
 package d3d.d3d11;
 
-import dxgi.DXGI.DXGI_FORMAT;
-import d3d.D3DCommon.D3D_PRIMITIVE_TOPOLOGY;
-import d3d.d3d11.D3D11.D3D11_MAP;
+import dxgi.DXGI;
+import d3d.D3DCommon;
+import d3d.d3d11.D3D11;
 import com.IUnknown;
 import cpp.Star;
 
 typedef DeviceContext = Star<DeviceContextRef>;
 
 @:unreflective
+@:structAccess
 @:native("ID3D11DeviceContext")
 @:include("d3d11.h")
-private extern class DeviceContextRef extends IUnknown
+private extern class DeviceContextRef extends IUnknownRef
 {
-    inline function draw(_vertexCount : Int, _startVertexLocation : Int) : Void
-    {
-        untyped __cpp__('{0}->Draw({1}, {2})', this, _vertexCount, _startVertexLocation);
-    }
+    @:native('Draw')
+    function draw(_vertexCount : Int, _startVertexLocation : Int) : Void;
 
-    inline function drawIndexed(_indexCount : Int, _startIndexLocation : Int, _baseVertexLocation : Int) : Void
-    {
-        untyped __cpp__('{0}->DrawIndexed({1}, {2}, {3})', this, _indexCount, _startIndexLocation, _baseVertexLocation);
-    }
+    @:native('DrawIndexed')
+    function drawIndexed(_indexCount : Int, _startIndexLocation : Int, _baseVertexLocation : Int) : Void;
 
-    inline function iaSetInputLayout(_layout : InputLayout) : Void
-    {
-        untyped __cpp__('{0}->IASetInputLayout({1})', this, _layout);
-    }
+    @:native('IASetInputLayout')
+    function iaSetInputLayout(_layout : InputLayout) : Void;
 
-    inline function iaSetPrimitiveTopology(_topology : D3D_PRIMITIVE_TOPOLOGY) : Void
-    {
-        untyped __cpp__('{0}->IASetPrimitiveTopology({1})', this, _topology);
-    }
+    @:native('IASetPrimitiveTopology')
+    function iaSetPrimitiveTopology(_topology : D3D_PRIMITIVE_TOPOLOGY) : Void;
 
     inline function iaSetVertexBuffer(_startSlot : Int, _vertexBuffer : Buffer, _stride : Int, _offset : Int) : Void
     {
@@ -58,6 +51,11 @@ private extern class DeviceContextRef extends IUnknown
         untyped __cpp__('{0}->VSSetConstantBuffers({1}, 1, (ID3D11Buffer**)&{2})', this, _startSlot, _constantBuffer);
     }
 
+    inline function psSetConstantBuffer(_startSlot : Int, _constantBuffer : Buffer) : Void
+    {
+        untyped __cpp__('{0}->PSSetConstantBuffers({1}, 1, (ID3D11Buffer**)&{2})', this, _startSlot, _constantBuffer);
+    }
+
     inline function vsSetShader(_shader : VertexShader) : Void
     {
         untyped __cpp__('{0}->VSSetShader((ID3D11VertexShader*){1}, 0, 0)', this, _shader);
@@ -78,15 +76,11 @@ private extern class DeviceContextRef extends IUnknown
         untyped __cpp__('{0}->ClearRenderTargetView((ID3D11RenderTargetView*){1}, (FLOAT*){2})', this, _viewport, cpp.Pointer.ofArray(_color));
     }
 
-    inline function map(_resource : Buffer, _subresource : Int, _mapType : D3D11_MAP, _mapFlag : Int, _mappedResource : MappedSubResource) : Int
-    {
-        return untyped __cpp__('{0}->Map({1}, {2}, {3}, {4}, &{5})', this, _resource, _subresource, _mapType, _mapFlag, _mappedResource);
-    }
+    @:native('Map')
+    function map(_resource : Buffer, _subresource : Int, _mapType : D3D11_MAP, _mapFlag : Int, _mappedResource : Star<MappedSubResource>) : Int;
 
-    inline function unmap(_resource : Buffer, _subresource : Int) : Void
-    {
-        untyped __cpp__('{0}->Unmap({1}, {2})', this, _resource, _subresource);
-    }
+    @:native('Unmap')
+    function unmap(_resource : Buffer, _subresource : Int) : Void;
 
     inline function rsSetState(_state : RasterizerState) : Void
     {

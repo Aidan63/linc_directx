@@ -9,7 +9,7 @@ typedef ShaderResourceView = Star<ShaderResourceViewRef>;
 @:unreflective
 @:native("ID3D11ShaderResourceView")
 @:include("d3d11.h")
-private extern class ShaderResourceViewRef extends IUnknown
+private extern class ShaderResourceViewRef extends IUnknownRef
 {
     //
 }

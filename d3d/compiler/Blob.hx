@@ -10,7 +10,7 @@ typedef Blob = Star<BlobRef>;
 @:structAccess
 @:include("D3Dcommon.h")
 @:native("ID3DBlob")
-extern class BlobRef extends IUnknown
+extern class BlobRef extends IUnknownRef
 {
     @:native('GetBufferPointer')
     function getBufferPointer() : cpp.Star<cpp.Void>;

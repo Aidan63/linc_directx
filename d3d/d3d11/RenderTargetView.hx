@@ -9,7 +9,7 @@ typedef RenderTargetView = Star<RenderTargetViewRef>;
 @:unreflective
 @:native("ID3D11RenderTargetView")
 @:include("d3d11.h")
-private extern class RenderTargetViewRef extends IUnknown
+private extern class RenderTargetViewRef extends IUnknownRef
 {
     //
 }

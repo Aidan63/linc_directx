@@ -9,7 +9,7 @@ typedef InputLayout = Star<InputLayoutRef>;
 @:unreflective
 @:native("ID3D11InputLayout")
 @:include("d3d11.h")
-private extern class InputLayoutRef extends IUnknown
+private extern class InputLayoutRef extends IUnknownRef
 {
     //
 }

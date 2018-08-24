@@ -232,7 +232,7 @@ private extern class NATIVE_D3D11_CPU_ACCESS_FLAG {}
 @:include("d3d11.h")
 extern class D3D11
 {
-    inline static function createDeviceAndSwapChain(_adapter : Adapter, _description : SwapChainDescription, _swapchain : Star<SwapChain>, _device : Star<Device>, _context : Star<DeviceContext>) : Int
+    inline static function createDeviceAndSwapChain(_adapter : Adapter, _description : Star<SwapChainDescription>, _swapchain : Star<SwapChain>, _device : Star<Device>, _context : Star<DeviceContext>) : Int
     {
         return untyped __cpp__('D3D11CreateDeviceAndSwapChain(
             {0},

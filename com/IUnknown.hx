@@ -8,7 +8,7 @@ typedef IUnknown = Star<IUnknownRef>;
 @:structAccess
 @:native("IUnknown")
 @:include("unknwn.h")
-private extern class IUnknownRef
+extern class IUnknownRef
 {
     @:native('Release')
     function release() : Void;

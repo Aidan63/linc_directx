@@ -9,7 +9,7 @@ typedef Texture2D = Star<Texture2DRef>;
 @:unreflective
 @:native("ID3D11Texture2D")
 @:include("d3d11.h")
-private extern class Texture2DRef extends IUnknown
+private extern class Texture2DRef extends IUnknownRef
 {
     //
 }

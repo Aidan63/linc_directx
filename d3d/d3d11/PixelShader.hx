@@ -9,7 +9,7 @@ typedef PixelShader = Star<PixelShaderRef>;
 @:unreflective
 @:native("ID3D11PixelShader")
 @:include("d3d11.h")
-private extern class PixelShaderRef extends IUnknown
+private extern class PixelShaderRef extends IUnknownRef
 {
     //
 }
