@@ -6,6 +6,8 @@ import d3d11.resources.*;
 import dxgi.DXGI;
 import com.IUnknown;
 import cpp.Star;
+import cpp.Pointer;
+import cpp.Reference;
 
 typedef DeviceContext = Star<DeviceContextRef>;
 
@@ -15,11 +17,24 @@ typedef DeviceContext = Star<DeviceContextRef>;
 @:include("d3d11.h")
 private extern class DeviceContextRef extends IUnknownRef
 {
+    @:native('ClearRenderTargetView')
+    private function clearRenderTargetViewNative(_viewport : RenderTargetView, _colors : Star<cpp.Float32>) : Void;
+    inline  function clearRenderTargetView(_viewport : RenderTargetView, _color : Array<cpp.Float32>) : Void
+    {
+        clearRenderTargetViewNative(_viewport, cast Pointer.arrayElem(_color, 0));
+    }
+
     @:native('Draw')
     function draw(_vertexCount : Int, _startVertexLocation : Int) : Void;
 
     @:native('DrawIndexed')
     function drawIndexed(_indexCount : Int, _startIndexLocation : Int, _baseVertexLocation : Int) : Void;
+
+    @:native('Map')
+    function map(_resource : Buffer, _subresource : Int, _mapType : D3D11_MAP, _mapFlag : Int, _mappedResource : Star<MappedSubResource>) : Int;
+
+    @:native('Unmap')
+    function unmap(_resource : Buffer, _subresource : Int) : Void;
 
     @:native('IASetInputLayout')
     function iaSetInputLayout(_layout : InputLayout) : Void;
@@ -27,32 +42,47 @@ private extern class DeviceContextRef extends IUnknownRef
     @:native('IASetPrimitiveTopology')
     function iaSetPrimitiveTopology(_topology : D3D_PRIMITIVE_TOPOLOGY) : Void;
 
-    inline function iaSetVertexBuffer(_startSlot : Int, _vertexBuffer : Buffer, _stride : Int, _offset : Int) : Void
-    {
-        untyped __cpp__('{0}->IASetVertexBuffers({1}, 1, (ID3D11Buffer**)&{2}, (UINT*)&{3}, (UINT*)&{4})', this, _startSlot, _vertexBuffer, _stride, _offset);
-    }
-
     @:native('IASetIndexBuffer')
     function iaSetIndexBuffer(_indexBuffer : Buffer, _format : DXGI_FORMAT, _offset : Int) : Void;
 
-    inline function omSetRenderTargets(_views : RenderTargetView) : Void
+    @:native('IASetVertexBuffers')
+    private function iaSetVertexBuffersNative(_startSlot : Int, _numBuffers : Int, _buffers : Star<Buffer>, _strides : Star<cpp.UInt32>, _offsets : Star<cpp.UInt32>) : Void;
+    inline  function iaSetVertexBuffers(_startSlot : Int, _vertexBuffers : Array<Reference<Buffer>>, _strides : Array<cpp.UInt32>, _offsets : Array<cpp.UInt32>) : Void
     {
-        untyped __cpp__('{0}->OMSetRenderTargets(1, (ID3D11RenderTargetView**)&{1}, NULL)', this, _views);
+        var el : Buffer = _vertexBuffers[0];
+        iaSetVertexBuffersNative(_startSlot, _vertexBuffers.length, cast Pointer.addressOf(el), cast Pointer.arrayElem(_strides, 0), cast Pointer.arrayElem(_offsets, 0));
     }
 
-    inline function rsSetViewports(_viewport : Viewport) : Void
+    @:native('OMSetRenderTargets')
+    private function omSetRenderTargetsNative(_numViews : Int, _renderTargetViews : Star<RenderTargetView>, _depthStencilView : DepthStencilView) : Void;
+    inline  function omSetRenderTargets(_renderTargetViews : Array<Reference<RenderTargetView>>, _depthStencilView : DepthStencilView) : Void
     {
-        untyped __cpp__('{0}->RSSetViewports(1, (D3D11_VIEWPORT*)&{1})', this, _viewport);
+        var el : RenderTargetView = _renderTargetViews[0];
+        omSetRenderTargetsNative(_renderTargetViews.length, cast Pointer.addressOf(el), _depthStencilView);
     }
 
-    inline function vsSetConstantBuffer(_startSlot : Int, _constantBuffer : Buffer) : Void
+    @:native('RSSetViewports')
+    private function rsSetViewportsNative(_num : Int, _viewports : Star<Viewport>) : Void;
+    inline  function rsSetViewports(_viewports : Array<Reference<Viewport>>) : Void
     {
-        untyped __cpp__('{0}->VSSetConstantBuffers({1}, 1, (ID3D11Buffer**)&{2})', this, _startSlot, _constantBuffer);
+        var el : Viewport = _viewports[0];
+        rsSetViewportsNative(_viewports.length, cast Pointer.addressOf(el));
     }
 
-    inline function psSetConstantBuffer(_startSlot : Int, _constantBuffer : Buffer) : Void
+    @:native('VSSetConstantBuffers')
+    private function vsSetConstantBuffersNative(_startSlot : Int, _num : Int, _buffers : Star<Buffer>) : Void;
+    inline  function vsSetConstantBuffers(_startSlot : Int, _buffers : Array<Reference<Buffer>>) : Void
     {
-        untyped __cpp__('{0}->PSSetConstantBuffers({1}, 1, (ID3D11Buffer**)&{2})', this, _startSlot, _constantBuffer);
+        var el : Buffer = _buffers[0];
+        vsSetConstantBuffersNative(_startSlot, _buffers.length, cast Pointer.addressOf(el));
+    }
+
+    @:native('PSSetConstantBuffers')
+    private function psSetConstantBuffersNative(_startSlot : Int, _num : Int, _buffers : Star<Buffer>) : Void;
+    inline  function psSetConstantBuffers(_startSlot : Int, _buffers : Array<Reference<Buffer>>) : Void
+    {
+        var el : Buffer = _buffers[0];
+        psSetConstantBuffersNative(_startSlot, _buffers.length, cast Pointer.addressOf(el));
     }
 
     @:native('VSSetShader')
@@ -61,37 +91,37 @@ private extern class DeviceContextRef extends IUnknownRef
     @:native('PSSetShader')
     function psSetShader(_shader : PixelShader, _classInstances : Star<ClassInstance>, _numInstances : Int) : Void;
 
-    inline function psSetShaderResource(_slot : Int, _resouce : ShaderResourceView) : Void
+    @:native('PSSetShaderResources')
+    private function psSetShaderResourcesNative(_startSlot : Int, _num : Int, _shaderResourceViews : Star<ShaderResourceView>) : Void;
+    inline  function psSetShaderResources(_startSlot : Int, _shaderResourceViews : Array<Reference<ShaderResourceView>>) : Void
     {
-        untyped __cpp__('{0}->PSSetShaderResources({1}, 1, (ID3D11ShaderResourceView**)&{2})', this, _slot, _resouce);
+        var el : ShaderResourceView = _shaderResourceViews[0];
+        psSetShaderResourcesNative(_startSlot, _shaderResourceViews.length, cast Pointer.addressOf(el));
     }
-
-    inline function clearRenderTargetView(_viewport : RenderTargetView, _color : Array<cpp.Float32>) : Void
-    {
-        untyped __cpp__('{0}->ClearRenderTargetView((ID3D11RenderTargetView*){1}, (FLOAT*){2})', this, _viewport, cpp.Pointer.ofArray(_color));
-    }
-
-    @:native('Map')
-    function map(_resource : Buffer, _subresource : Int, _mapType : D3D11_MAP, _mapFlag : Int, _mappedResource : Star<MappedSubResource>) : Int;
-
-    @:native('Unmap')
-    function unmap(_resource : Buffer, _subresource : Int) : Void;
 
     @:native('RSSetState')
     function rsSetState(_state : RasterizerState) : Void;
 
-    inline function omSetBlendState(_blendState : BlendState, _blendFactor : Array<cpp.Float32>, _sampleMask : Int) : Void
+    @:native('OMSetBlendState')
+    private function omSetBlendStateNative(_blendState : BlendState, _blendFactor : Star<cpp.Float32>, _sampleMask : Int) : Void;
+    inline  function omSetBlendState(_blendState : BlendState, _blendFactor : Array<cpp.Float32>, _sampleMask : Int) : Void
     {
-        untyped __cpp__('{0}->OMSetBlendState({1}, (FLOAT*){2}, {3})', this, _blendState, cpp.Pointer.ofArray(_blendFactor), _sampleMask);
+        omSetBlendStateNative(_blendState, cast Pointer.arrayElem(_blendFactor, 0), _sampleMask);
     }
 
-    inline function rsSetScissorRect(_rect : Rect) : Void
+    @:native('RSSetScissorRects')
+    private function rsSetScissorRectsNative(_num : Int, _rects : Star<Rect>) : Void;
+    inline  function rsSetScissorRects(_rects : Array<Reference<Rect>>) : Void
     {
-        untyped __cpp__('{0}->RSSetScissorRects(1, &{1})', this, _rect);
+        var el : Rect = _rects[0];
+        rsSetScissorRectsNative(_rects.length, cast Pointer.addressOf(el));
     }
 
-    inline function psSetSampler(_startSlot : Int, _sampler : SamplerState) : Void
+    @:native('PSSetSamplers')
+    private function psSetSamplersNative(_startSlot : Int, _num : Int, _samplers : Star<SamplerState>) : Void;
+    inline  function psSetSamplers(_startSlot : Int, _samplers : Array<Reference<SamplerState>>) : Void
     {
-        untyped __cpp__('{0}->PSSetSamplers({1}, 1, (ID3D11SamplerState**)&{2})', this, _startSlot, _sampler);
+        var el : SamplerState = _samplers[0];
+        psSetSamplersNative(_startSlot, _samplers.length, cast Pointer.addressOf(el));
     }
 }
