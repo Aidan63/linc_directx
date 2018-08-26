@@ -24,7 +24,7 @@ extern class SwapChainDescription
     var bufferCount : Int;
 
     @:native('OutputWindow')
-    var outputWindow : cpp.RawPointer<cpp.Void>;
+    var outputWindow : com.HWND;
 
     @:native('Windowed')
     var windowed : Bool;
