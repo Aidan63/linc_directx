@@ -124,4 +124,7 @@ private extern class DeviceContextRef extends IUnknownRef
         var el : SamplerState = _samplers[0];
         psSetSamplersNative(_startSlot, _samplers.length, cast Pointer.addressOf(el));
     }
+
+    @:native('OMSetDepthStencilState')
+    function omSetDepthStencilState(_state : DepthStencilState, _stencilRef : Int) : Void;
 }

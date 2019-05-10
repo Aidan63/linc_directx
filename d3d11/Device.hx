@@ -18,6 +18,12 @@ private extern class DeviceRef extends IUnknownRef
         return untyped __cpp__('{0}->CreateInputLayout({1}.data(), {1}.size(), {2}, {3}, (ID3D11InputLayout**){4})', this, _description, _shaderBytecode, _bytecodeLength, _inputLayout);
     }
 
+    @:native('CreateDepthStencilState')
+    function createDepthStencilState(_description : Star<DepthStencilDescription>, _state : Star<DepthStencilState>) : Int;
+
+    @:native('CreateDepthStencilView')
+    function createDepthStencilView(_resource : Resource, _description : Star<DepthStencilViewDescription>, _view : Star<DepthStencilView>) : Int;
+
     @:native('CreateTexture2D')
     function createTexture2D(_description : Star<Texture2DDescription>, _initialData : Star<SubResourceData>, _texture2D : Star<Texture2D>) : Int;
 
