@@ -24,6 +24,9 @@ private extern class DeviceContextRef extends IUnknownRef
         clearRenderTargetViewNative(_viewport, cast Pointer.arrayElem(_color, 0));
     }
 
+    @:native('ClearDepthStencilView')
+    function clearDepthStencilView(_depthStencilView : DepthStencilView, _clearFlags : Int, _depth : cpp.Float32, _stencil : cpp.UInt8) : Void;
+
     @:native('Draw')
     function draw(_vertexCount : Int, _startVertexLocation : Int) : Void;
 

@@ -288,6 +288,14 @@ private extern class NATIVE_D3D11_STENCIL_OP {}
 @:native('::cpp::Struct<D3D11_DSV_DIMENSION, ::cpp::EnumHandler>')
 private extern class NATIVE_D3D11_DSV_DIMENSION {}
 
+// D3D11_CLEAR_FLAG
+
+enum abstract D3D11_CLEAR_FLAG(cpp.UInt32)
+{
+    var ClearDepth   = 0x1;
+    var ClearStencil = 0x2;
+}
+
 // Static functions
 
 @:unreflective
