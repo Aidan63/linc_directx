@@ -21,11 +21,11 @@ class D3d11
      * Creates a device that represents the display adapter.
      * @param _adapter A pointer to the video adapter to use when creating a device.
      * Pass NULL to use the default adapter, which is the first adapter that is enumerated by `IDXGIFactory1::EnumAdapters`.
-     * @param _driverType The D3D_DRIVER_TYPE, which represents the driver type to create.
+     * @param _driverType The `D3D_DRIVER_TYPE`, which represents the driver type to create.
      * @param _software A handle to a DLL that implements a software rasterizer.
      * If DriverType is `D3D_DRIVER_TYPE_SOFTWARE`, Software must not be NULL. Get the handle by calling LoadLibrary, LoadLibraryEx , or GetModuleHandle.
      * @param _flags The runtime layers to enable (see `D3D11_CREATE_DEVICE_FLAG`); values can be bitwise OR'd together.
-     * @param _featureLevels A pointer to an array of D3D_FEATURE_LEVELs, which determine the order of feature levels to attempt to create.
+     * @param _featureLevels A pointer to an array of `D3D_FEATURE_LEVEL`s, which determine the order of feature levels to attempt to create.
      * If pFeatureLevels is set to NULL, this function uses the following array of feature levels:
      * ```haxe
      * Level11_0,

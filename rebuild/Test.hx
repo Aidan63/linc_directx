@@ -1,7 +1,6 @@
 package;
 
-import d3d11.interfaces.D3d11RasterizerState;
-import d3d11.structures.D3d11RasterizerDescription;
+import d3d11.interfaces.D3d11BlendState;
 import com.HWND;
 import sdl.Window;
 import sdl.SDL;
@@ -14,6 +13,12 @@ import dxgi.structures.DxgiSwapChainDescription;
 import d3d11.D3d11;
 import d3d11.interfaces.D3d11DeviceContext;
 import d3d11.interfaces.D3d11Device;
+import d3d11.interfaces.D3d11RasterizerState;
+import d3d11.structures.D3d11RasterizerDescription;
+import d3d11.structures.D3d11Rect;
+import d3d11.structures.D3d11Viewport;
+import d3d11.structures.D3d11BlendDescription;
+import d3d11.enumerations.D3d11ColorWriteEnable;
 
 @:headerInclude('SDL_syswm.h')
 @:buildXml('<target id = "haxe">
@@ -36,6 +41,9 @@ class Test
     final device    : D3d11Device;
     final context   : D3d11DeviceContext;
     final rasterize : D3d11RasterizerState;
+    final viewport  : D3d11Viewport;
+    final clipRect  : D3d11Rect;
+    final blending  : D3d11BlendState;
 
     public function new()
     {
@@ -52,6 +60,7 @@ class Test
         device    = new D3d11Device();
         context   = new D3d11DeviceContext();
         rasterize = new D3d11RasterizerState();
+        blending  = new D3d11BlendState();
 
         // Get SDL variables
 
@@ -105,6 +114,18 @@ class Test
             throw 'failed to create swap chain';
         }
 
+        viewport = new D3d11Viewport();
+        viewport.topLeftX = 0;
+        viewport.topLeftY = 0;
+        viewport.width    = 1280;
+        viewport.height   = 720;
+
+        clipRect = new D3d11Rect();
+        clipRect.top    = 0;
+        clipRect.left   = 0;
+        clipRect.right  = 1280;
+        clipRect.bottom = 720;
+
         var rasterizerDescription = new D3d11RasterizerDescription();
         rasterizerDescription.fillMode              = Solid;
         rasterizerDescription.cullMode              = None;
@@ -121,5 +142,24 @@ class Test
         {
             throw 'failed to create rasterizer state';
         }
+
+        var blendDesc = new D3d11BlendDescription();
+        blendDesc.alphaToCoverageEnable                 = false;
+        blendDesc.independentBlendEnable                = false;
+        blendDesc.renderTarget[0].blendEnable           = true;
+        blendDesc.renderTarget[0].srcBlend              = SourceAlpha;
+        blendDesc.renderTarget[0].srcBlendAlpha         = One;
+        blendDesc.renderTarget[0].destBlend             = InverseSourceAlpha;
+        blendDesc.renderTarget[0].destBlendAlpha        = Zero;
+        blendDesc.renderTarget[0].blendOp               = Add;
+        blendDesc.renderTarget[0].blendOpAlpha          = Add;
+        blendDesc.renderTarget[0].renderTargetWriteMask = D3d11ColorWriteEnable.All;
+
+        if (device.createBlendState(blendDesc, blending) != Ok)
+        {
+            throw 'failed to create blend state';
+        }
+
+        trace('done');
     }
 }

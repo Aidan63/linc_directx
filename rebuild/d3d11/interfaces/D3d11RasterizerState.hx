@@ -12,7 +12,7 @@ class D3d11RasterizerState extends Unknown
 {
     /**
      * Gets the description for rasterizer state that you used to create the rasterizer-state object.
-     * @param _description A pointer to a D3D11_RASTERIZER_DESC structure that receives a description of the rasterizer state.
+     * @param _description A pointer to a `D3D11_RASTERIZER_DESC` structure that receives a description of the rasterizer state.
      */
     public function getDescription(_description : D3d11RasterizerDescription)
     {
