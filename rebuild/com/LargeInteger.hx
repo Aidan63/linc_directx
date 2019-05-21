@@ -5,7 +5,7 @@ import cpp.Star;
 @:keep
 @:unreflective
 @:structAccess
-@:include('')
+@:include('winnt.h')
 @:native('LARGE_INTEGER')
 extern class LargeInteger
 {

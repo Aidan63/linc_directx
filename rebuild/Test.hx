@@ -1,5 +1,10 @@
 package;
 
+import d3d11.interfaces.D3d11Buffer;
+import d3d11.enumerations.D3d11CpuAccessFlag;
+import d3d11.enumerations.D3d11BindFlag;
+import d3d11.structures.D3d11BufferDescription;
+import dxgi.structures.DxgiFrameStatistics;
 import d3d11.interfaces.D3d11BlendState;
 import com.HWND;
 import sdl.Window;
@@ -44,6 +49,7 @@ class Test
     final viewport  : D3d11Viewport;
     final clipRect  : D3d11Rect;
     final blending  : D3d11BlendState;
+    final buffer    : D3d11Buffer;
 
     public function new()
     {
@@ -61,6 +67,7 @@ class Test
         context   = new D3d11DeviceContext();
         rasterize = new D3d11RasterizerState();
         blending  = new D3d11BlendState();
+        buffer    = new D3d11Buffer();
 
         // Get SDL variables
 
@@ -158,6 +165,17 @@ class Test
         if (device.createBlendState(blendDesc, blending) != Ok)
         {
             throw 'failed to create blend state';
+        }
+
+        var bufferDesc = new D3d11BufferDescription();
+        bufferDesc.byteWidth      = 128;
+        bufferDesc.usage          = Dynamic;
+        bufferDesc.bindFlags      = D3d11BindFlag.VertexBuffer;
+        bufferDesc.cpuAccessFlags = D3d11CpuAccessFlag.Write;
+
+        if (device.createBuffer(bufferDesc, null, buffer) != Ok)
+        {
+            throw 'failed to create buffer';
         }
 
         trace('done');

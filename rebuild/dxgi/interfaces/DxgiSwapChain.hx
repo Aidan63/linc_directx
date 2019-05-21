@@ -84,7 +84,7 @@ class DxgiSwapChain extends DxgiObject
             return InvalidCall;
         }
 
-        return (cast ptr : Star<NativeIDXGISwapChain>).getFullscreenState(Pointer.arrayElem(_fullscreen, 0).ptr, cast _target.ptr.addressOf());
+        return (cast ptr : Star<NativeIDXGISwapChain>).getFullscreenState(cast Pointer.arrayElem(_fullscreen, 0).ptr, cast _target.ptr.addressOf());
     }
 
     /**
@@ -99,7 +99,7 @@ class DxgiSwapChain extends DxgiObject
             return InvalidCall;
         }
 
-        return (cast ptr : Star<NativeIDXGISwapChain>).getLastPresentCount(Pointer.arrayElem(_lastPresentCount, 0).ptr);
+        return (cast ptr : Star<NativeIDXGISwapChain>).getLastPresentCount(cast Pointer.arrayElem(_lastPresentCount, 0).ptr);
     }
 
     /**
@@ -175,7 +175,7 @@ class DxgiSwapChain extends DxgiObject
      */
     public function setFullscreenState(_fullscreen : Bool, _target : DxgiOutput) : DxgiError
     {
-        return (cast ptr : Star<NativeIDXGISwapChain>).setFullscreenState(_fullscreen, cast _target.ptr);
+        return (cast ptr : Star<NativeIDXGISwapChain>).setFullscreenState(cast _fullscreen, cast _target.ptr);
     }
 }
 
@@ -197,14 +197,14 @@ extern class NativeIDXGISwapChain extends NativeIDXGIObject
     @:native('GetContainingOutput')
     function getContainingOutput(_output : Star<Star<NativeIDXGIOutput>>) : Int;
 
-    @:native('GetDescription')
+    @:native('GetDesc')
     function getDescription(_description : Star<NativeDXGISwapChainDescription>) : Int;
 
     @:native('GetFrameStatistics')
     function getFrameStatistics(_stats : Star<NativeDXGIFrameStatistics>) : Int;
 
     @:native('GetFullscreenState')
-    function getFullscreenState(_fullscreen : Star<Bool>, _target : Star<Star<NativeIDXGIOutput>>) : Int;
+    function getFullscreenState(_fullscreen : Star<cpp.Int32>, _target : Star<Star<NativeIDXGIOutput>>) : Int;
 
     @:native('GetLastPresentCount')
     function getLastPresentCount(_lastPresentCount : Star<cpp.UInt32>) : Int;
@@ -219,5 +219,5 @@ extern class NativeIDXGISwapChain extends NativeIDXGIObject
     function resizeTarget(_newTargetParameters : Star<NativeDXGIModeDescription>) : Int;
 
     @:native('SetFullscreenState')
-    function setFullscreenState(_fullscreen : Bool, _target : Star<NativeIDXGIOutput>) : Int;
+    function setFullscreenState(_fullscreen : cpp.Int32, _target : Star<NativeIDXGIOutput>) : Int;
 }

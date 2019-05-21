@@ -74,7 +74,7 @@ class DxgiSwapChainDescription
     inline function set_windowed(_v : Bool) : Bool return backing.windowed = _v;
 
     /**
-     * A member of the DXGI_SWAP_EFFECT enumerated type that describes options for handling the contents of the presentation buffer after presenting a surface.
+     * A member of the `DXGI_SWAP_EFFECT` enumerated type that describes options for handling the contents of the presentation buffer after presenting a surface.
      */
     public var swapEffect (get, set) : DxgiSwapEffect;
 
@@ -88,7 +88,7 @@ class DxgiSwapChainDescription
     }
 
     /**
-     * A member of the DXGI_SWAP_CHAIN_FLAG enumerated type that describes options for swap-chain behavior.
+     * A member of the `DXGI_SWAP_CHAIN_FLAG` enumerated type that describes options for swap-chain behavior.
      */
     public var flags (get, set) : Int;
 

@@ -47,13 +47,18 @@ extern class NativeDXGIFrameStatistics
     @:native('DXGI_FRAME_STATISTICS')
     static function createRef() : NativeDXGIFrameStatistics;
 
+    @:native('PresentCount')
     var presentCount : cpp.UInt32;
 
+    @:native('PresentRefreshCount')
     var presentRefreshCount : cpp.UInt32;
 
+    @:native('SyncRefreshCount')
     var syncRefreshCount : cpp.UInt32;
 
+    @:native('SyncQPCTime')
     var syncQpcTime : LargeInteger;
 
+    @:native('SyncGPUTime')
     var syncGpuTime : LargeInteger;
 }
