@@ -1,5 +1,8 @@
 package;
 
+import d3d11.interfaces.D3d11Texture2D;
+import d3d11.enumerations.D3d11Usage;
+import d3d11.structures.D3d11Texture2DDescription;
 import haxe.io.Bytes;
 import d3d11.structures.D3d11SubResourceData;
 import d3d11.interfaces.D3d11Buffer;
@@ -51,6 +54,7 @@ class Test
     final clipRect  : D3d11Rect;
     final blending  : D3d11BlendState;
     final buffer    : D3d11Buffer;
+    final depthTex  : D3d11Texture2D;
 
     public function new()
     {
@@ -69,6 +73,8 @@ class Test
         rasterize = new D3d11RasterizerState();
         blending  = new D3d11BlendState();
         buffer    = new D3d11Buffer();
+        depthTex  = new D3d11Texture2D();
+
 
         // Get SDL variables
 
@@ -181,6 +187,24 @@ class Test
         if (device.createBuffer(bufferDesc, initialBytes, buffer) != Ok)
         {
             throw 'failed to create buffer';
+        }
+
+        var depthTextureDescription = new D3d11Texture2DDescription();
+        depthTextureDescription.width              = 1280;
+        depthTextureDescription.height             = 720;
+        depthTextureDescription.mipLevels          = 1;
+        depthTextureDescription.arraySize          = 1;
+        depthTextureDescription.format             = D32FloatS8X24UInt;
+        depthTextureDescription.sampleDesc.count   = 1;
+        depthTextureDescription.sampleDesc.quality = 0;
+        depthTextureDescription.usage              = D3d11Usage.Default;
+        depthTextureDescription.bindFlags          = D3d11BindFlag.DepthStencil;
+        depthTextureDescription.cpuAccessFlags     = 0;
+        depthTextureDescription.miscFlags          = 0;
+
+        if (device.createTexture2D(depthTextureDescription, null, depthTex) != Ok)
+        {
+            throw 'failed to create depth texture';
         }
 
         trace('done');

@@ -29,7 +29,7 @@ extern class NativeID3D11BlendState extends NativeIUnknown
 {
     inline static function uuid() : GUID
     {
-        return untyped __cpp__('__uuidof(ID3D11RasterizerState)');
+        return untyped __cpp__('__uuidof(ID3D11BlendState)');
     }
 
     @:native('GetDesc')
