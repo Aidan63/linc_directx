@@ -1,7 +1,9 @@
 package d3d11.structures;
 
+import cpp.Function;
 import cpp.Pointer;
 import cpp.Star;
+import cpp.vm.Gc;
 
 /**
  * Defines the dimensions of a viewport.
@@ -76,6 +78,14 @@ class D3d11Viewport
         {
             backing = _existing.ptr;
         }
+
+        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
+    }
+
+    @:void
+    static function finalize(_obj : D3d11Viewport)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
     }
 }
 

@@ -1,8 +1,10 @@
 package d3d11.structures;
 
-import haxe.io.BytesData;
+import cpp.Function;
 import cpp.Pointer;
 import cpp.Star;
+import cpp.vm.Gc;
+import haxe.io.BytesData;
 
 /**
  * Specifies data for initializing a subresource.
@@ -59,6 +61,14 @@ class D3d11SubResourceData
         {
             backing = _existing.ptr;
         }
+
+        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
+    }
+
+    @:void
+    static function finalize(_obj : D3d11SubResourceData)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
     }
 }
 

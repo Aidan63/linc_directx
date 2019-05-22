@@ -1,7 +1,9 @@
 package d3d11.structures;
 
+import cpp.Function;
 import cpp.Pointer;
 import cpp.Star;
+import cpp.vm.Gc;
 import d3d11.structures.D3d11RenderTargetBlendDescription;
 
 /**
@@ -49,6 +51,14 @@ class D3d11BlendDescription
         }
 
         renderTarget = [ for (i in 0...8) new D3d11RenderTargetBlendDescription(Pointer.addressOf(backing.renderTarget[i])) ];
+
+        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
+    }
+
+    @:void
+    static function finalize(_obj : D3d11BlendDescription)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
     }
 }
 

@@ -2,6 +2,8 @@ package d3d11.structures;
 
 import cpp.Star;
 import cpp.Pointer;
+import cpp.Function;
+import cpp.vm.Gc;
 import d3d11.enumerations.D3d11Blend;
 import d3d11.enumerations.D3d11BlendOp;
 
@@ -135,6 +137,14 @@ class D3d11RenderTargetBlendDescription
         {
             backing = _existing.ptr;
         }
+
+        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
+    }
+
+    @:void
+    static function finalize(_obj : D3d11RenderTargetBlendDescription)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
     }
 }
 

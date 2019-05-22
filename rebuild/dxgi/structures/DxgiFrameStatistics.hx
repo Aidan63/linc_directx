@@ -32,6 +32,12 @@ class DxgiFrameStatistics
             backing = _existing.ptr;
         }
     }
+
+    @:void
+    static function finalize(_obj : DxgiFrameStatistics)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
+    }
 }
 
 @:keep

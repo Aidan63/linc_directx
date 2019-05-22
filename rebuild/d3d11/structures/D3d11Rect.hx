@@ -1,7 +1,9 @@
 package d3d11.structures;
 
-import cpp.Pointer;
 import cpp.Star;
+import cpp.Pointer;
+import cpp.Function;
+import cpp.vm.Gc;
 
 /**
  * The RECT structure defines the coordinates of the upper-left and lower-right corners of a rectangle.
@@ -56,6 +58,14 @@ class D3d11Rect
         {
             backing = _existing.ptr;
         }
+
+        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
+    }
+
+    @:void
+    static function finalize(_obj : D3d11Rect)
+    {
+        Pointer.fromRaw(cast _obj.backing).destroy();
     }
 }
 

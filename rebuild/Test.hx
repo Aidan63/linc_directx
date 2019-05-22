@@ -1,10 +1,11 @@
 package;
 
+import haxe.io.Bytes;
+import d3d11.structures.D3d11SubResourceData;
 import d3d11.interfaces.D3d11Buffer;
 import d3d11.enumerations.D3d11CpuAccessFlag;
 import d3d11.enumerations.D3d11BindFlag;
 import d3d11.structures.D3d11BufferDescription;
-import dxgi.structures.DxgiFrameStatistics;
 import d3d11.interfaces.D3d11BlendState;
 import com.HWND;
 import sdl.Window;
@@ -173,7 +174,11 @@ class Test
         bufferDesc.bindFlags      = D3d11BindFlag.VertexBuffer;
         bufferDesc.cpuAccessFlags = D3d11CpuAccessFlag.Write;
 
-        if (device.createBuffer(bufferDesc, null, buffer) != Ok)
+        var initialBytes = new D3d11SubResourceData();
+        initialBytes.systemMemory = Bytes.alloc(128).getData();
+        initialBytes.systemMemoryPitch = 32;
+
+        if (device.createBuffer(bufferDesc, initialBytes, buffer) != Ok)
         {
             throw 'failed to create buffer';
         }
