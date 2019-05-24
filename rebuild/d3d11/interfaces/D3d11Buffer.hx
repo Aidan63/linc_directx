@@ -1,9 +1,9 @@
 package d3d11.interfaces;
 
 import com.GUID;
-import com.Unknown;
+import d3d11.interfaces.D3d11Resourse;
 
-class D3d11Buffer extends Unknown
+class D3d11Buffer extends D3d11Resource
 {
     //
 }
@@ -13,7 +13,7 @@ class D3d11Buffer extends Unknown
 @:structAccess
 @:include('d3d11.h')
 @:native('ID3D11Buffer')
-extern class NativeID3D11Buffer extends NativeIUnknown
+extern class NativeID3D11Buffer extends NativeID3D11Resource
 {
     inline static function uuid() : GUID
     {

@@ -46,7 +46,7 @@ class D3d11Tex2DMSDsv
 @:unreflective
 @:structAccess
 @:include('d3d11.h')
-@:native('D3D11_TEX1D_DSV')
+@:native('D3D11_TEX2DMS_DSV')
 extern class NativeD3D11Tex2DMSDsv
 {
     @:native('new D3D11_TEX2DMS_DSV')

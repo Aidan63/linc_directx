@@ -9,10 +9,13 @@ import d3d11.structures.D3d11BlendDescription;
 import d3d11.structures.D3d11BufferDescription;
 import d3d11.structures.D3d11SubResourceData;
 import d3d11.structures.D3d11Texture2DDescription;
+import d3d11.structures.D3d11DepthStencilViewDescription;
 import d3d11.interfaces.D3d11RasterizerState;
 import d3d11.interfaces.D3d11BlendState;
 import d3d11.interfaces.D3d11Buffer;
 import d3d11.interfaces.D3d11Texture2D;
+import d3d11.interfaces.D3d11Resourse;
+import d3d11.interfaces.D3d11DepthStencilView;
 
 using cpp.Native;
 
@@ -84,6 +87,18 @@ class D3d11Device extends Unknown
     {
         return (cast ptr : Star<NativeID3D11Device>).createTexture2D(_description.backing, _initialData != null ? _initialData.backing : null, cast _texture.ptr.addressOf());
     }
+
+    /**
+     * Create a depth-stencil view for accessing resource data.
+     * @param _resource Pointer to the resource that will serve as the depth-stencil surface. This resource must have been created with the `D3D11_BIND_DEPTH_STENCIL` flag.
+     * @param _description Pointer to a depth-stencil-view description (see `D3D11_DEPTH_STENCIL_VIEW_DESC`). Set this parameter to NULL to create a view that accesses mipmap level 0 of the entire resource (using the format the resource was created with).
+     * @param _view Address of a pointer to an `ID3D11DepthStencilView`. Set this parameter to NULL to validate the other input parameters (the method will return `S_FALSE` if the other input parameters pass validation).
+     * @return This method returns one of the following Direct3D 11 Return Codes.
+     */
+    public function createDepthStencilView(_resource : D3d11Resource, _description : Null<D3d11DepthStencilViewDescription>, _view : D3d11DepthStencilView) : D3d11Error
+    {
+        return (cast ptr : Star<NativeID3D11Device>).createDepthStencilView(cast _resource.ptr, _description != null ? _description.backing : null, cast _view.ptr.addressOf());
+    }
 }
 
 @:keep
@@ -109,4 +124,7 @@ extern class NativeID3D11Device extends NativeIUnknown
 
     @:native('CreateTexture2D')
     function createTexture2D(_desciption : Star<NativeD3D11Texture2DDescription>, _initialData : Star<NativeD3D11SubResourceData>, _texture : Star<Star<NativeID3D11Texture2D>>) : Int;
+
+    @:native('CreateDepthStencilView')
+    function createDepthStencilView(_resource : Star<NativeID3D11Resource>, _description : Star<NativeD3D11DepthStencilViewDescription>, _view : Star<Star<NativeID3D11DepthStencilView>>) : Int;
 }

@@ -1,5 +1,8 @@
 package;
 
+import cpp.Pointer;
+import d3d11.structures.D3d11MappedSubResource;
+import d3d11.interfaces.D3d11DepthStencilView;
 import d3d11.interfaces.D3d11Texture2D;
 import d3d11.enumerations.D3d11Usage;
 import d3d11.structures.D3d11Texture2DDescription;
@@ -28,6 +31,7 @@ import d3d11.structures.D3d11Rect;
 import d3d11.structures.D3d11Viewport;
 import d3d11.structures.D3d11BlendDescription;
 import d3d11.enumerations.D3d11ColorWriteEnable;
+import d3d11.structures.D3d11DepthStencilViewDescription;
 
 @:headerInclude('SDL_syswm.h')
 @:buildXml('<target id = "haxe">
@@ -55,6 +59,7 @@ class Test
     final blending  : D3d11BlendState;
     final buffer    : D3d11Buffer;
     final depthTex  : D3d11Texture2D;
+    final dsvView   : D3d11DepthStencilView;
 
     public function new()
     {
@@ -74,7 +79,7 @@ class Test
         blending  = new D3d11BlendState();
         buffer    = new D3d11Buffer();
         depthTex  = new D3d11Texture2D();
-
+        dsvView   = new D3d11DepthStencilView();
 
         // Get SDL variables
 
@@ -206,6 +211,26 @@ class Test
         {
             throw 'failed to create depth texture';
         }
+
+        var depthStencilViewDescription = new D3d11DepthStencilViewDescription();
+        depthStencilViewDescription.format             = D32FloatS8X24UInt;
+        depthStencilViewDescription.viewDimension      = Texture2D;
+        depthStencilViewDescription.texture2D.mipSlice = 0;
+
+        if (device.createDepthStencilView(depthTex, depthStencilViewDescription, dsvView) != Ok)
+        {
+            throw 'failed to create depth stencil view';
+        }
+
+        var mappedBuffer = new D3d11MappedSubResource();
+        if (context.map(buffer, 0, WriteDiscard, 0, mappedBuffer) != Ok)
+        {
+            throw 'failed to map buffer';
+        }
+
+        (mappedBuffer.data.reinterpret() : Pointer<Int>)[0] = 7;
+
+        context.unmap(buffer, 0);
 
         trace('done');
     }

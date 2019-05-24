@@ -2,13 +2,13 @@ package d3d11.interfaces;
 
 import cpp.Star;
 import com.GUID;
-import com.Unknown;
+import d3d11.interfaces.D3d11Resourse;
 import d3d11.structures.D3d11Texture2DDescription;
 
 /**
  * A 2D texture interface manages texel data, which is structured memory.
  */
-class D3d11Texture2D extends Unknown
+class D3d11Texture2D extends D3d11Resource
 {
     /**
      * Get the properties of the texture resource.
@@ -25,7 +25,7 @@ class D3d11Texture2D extends Unknown
 @:structAccess
 @:include('d3d11.h')
 @:native('ID3D11Texture2D')
-extern class NativeID3D11Texture2D extends NativeIUnknown
+extern class NativeID3D11Texture2D extends NativeID3D11Resource
 {
     inline static function uuid() : GUID
     {
