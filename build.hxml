@@ -3,6 +3,6 @@
 -lib safety
 -lib linc_sdl
 
--cp rebuild
+-cp ./
 
 -main Test

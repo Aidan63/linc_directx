@@ -1,336 +1,102 @@
 package d3d11;
 
-import dxgi.Adapter;
-import dxgi.SwapChainDescription;
-import dxgi.SwapChain;
+import cpp.Pointer;
 import cpp.Star;
+import com.HMODULE;
+import dxgi.interfaces.DxgiAdapter;
+import d3d11.interfaces.D3d11Device;
+import d3d11.interfaces.D3d11DeviceContext;
+import d3d11.enumerations.D3dDriverType;
+import d3d11.enumerations.D3dFeatureLevel;
+import d3d11.enumerations.D3d11CreateDeviceFlags;
+import d3d11.constants.D3d11Error;
 
-// D3D11_RTV_DIMENSION enum
+using cpp.Native;
 
-@:enum extern abstract D3D11_RTV_DIMENSION(NATIVE_D3D11_RTV_DIMENSION)
+class D3d11
 {
-    @:native('D3D11_RTV_DIMENSION_UNKNOWN')          var UNKNOWN;
-    @:native('D3D11_RTV_DIMENSION_BUFFER')           var BUFFER;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE1D')        var TEXTURE1D;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE1DARRAY')   var TEXTURE1DARRAY;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE2D')        var TEXTURE2D;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE2DARRAY')   var TEXTURE2DARRAY;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE2DMS')      var TEXTURE2DMS;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY') var TEXTURE2DMSARRAY;
-    @:native('D3D11_RTV_DIMENSION_TEXTURE3D')        var TEXTURE3D;
+    public static final SdkVersion = 7;
+
+    /**
+     * Creates a device that represents the display adapter.
+     * @param _adapter A pointer to the video adapter to use when creating a device.
+     * Pass NULL to use the default adapter, which is the first adapter that is enumerated by `IDXGIFactory1::EnumAdapters`.
+     * @param _driverType The `D3D_DRIVER_TYPE`, which represents the driver type to create.
+     * @param _software A handle to a DLL that implements a software rasterizer.
+     * If DriverType is `D3D_DRIVER_TYPE_SOFTWARE`, Software must not be NULL. Get the handle by calling LoadLibrary, LoadLibraryEx , or GetModuleHandle.
+     * @param _flags The runtime layers to enable (see `D3D11_CREATE_DEVICE_FLAG`); values can be bitwise OR'd together.
+     * @param _featureLevels A pointer to an array of `D3D_FEATURE_LEVEL`s, which determine the order of feature levels to attempt to create.
+     * If pFeatureLevels is set to NULL, this function uses the following array of feature levels:
+     * ```haxe
+     * Level11_0,
+     * Level10_1,
+     * Level10_0,
+     * Level9_3,
+     * Level9_2,
+     * Level9_1
+     * ```
+     * @param _sdkVersion The SDK version; use `D3d11.SdkVersion`.
+     * @param _device Returns the address of a pointer to an `ID3D11Device` object that represents the device created.
+     * If this parameter is NULL, no `ID3D11Device` will be returned.
+     * @param _featureLevel If successful, returns the first `D3D_FEATURE_LEVEL` from the pFeatureLevels array which succeeded.
+     * Supply NULL as an input if you don't need to determine which feature level is supported.
+     * @param _context Returns the address of a pointer to an `ID3D11DeviceContext` object that represents the device context.
+     * If this parameter is NULL, no `ID3D11DeviceContext` will be returned.
+     * @return Int
+     */
+    public static function createDevice(
+        _adapter : Null<DxgiAdapter>,
+        _driverType : D3dDriverType,
+        _software : Null<HMODULE>,
+        _flags : D3d11CreateDeviceFlags,
+        _featureLevels : Null<Array<D3dFeatureLevel>>,
+        _sdkVersion : Int,
+        _device : Null<D3d11Device>,
+        _featureLevel : Null<Array<D3dFeatureLevel>>,
+        _context : Null<D3d11DeviceContext>
+    ) : D3d11Error
+    {
+        var adapterPtr : Star<NativeIDXGIAdapter> = _adapter != null ? cast _adapter.ptr : null;
+        var devicePtr  : Star<Star<NativeID3D11Device>> = _device != null ? cast _device.ptr.addressOf() : null;
+        var contextPtr : Star<Star<NativeID3D11DeviceContext>> = _context != null ? cast _context.ptr.addressOf() : null;
+        var levelsPtr  : Star<D3dFeatureLevel> = null;
+        var gotLevel   : NativeD3DFeatureLevel = cast 0;
+        var levelsIdx = 0;
+
+        if (_featureLevels != null)
+        {
+            levelsPtr = cast Pointer.arrayElem(_featureLevels, 0).raw;
+            levelsIdx = _featureLevels.length;
+        }
+
+        var result = NativeD3D11.createDevice(adapterPtr, cast _driverType, _software, _flags, cast levelsPtr, levelsIdx, _sdkVersion, devicePtr, gotLevel.addressOf(), contextPtr);
+
+        if (_featureLevel != null && _featureLevel.length > 0)
+        {
+            _featureLevel[0] = cast gotLevel;
+        }
+
+        return result;
+    }
 }
 
-@:native('::cpp::Struct<D3D11_RTV_DIMENSION, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_RTV_DIMENSION {}
-
-// D3D11_COMPARISON_FUNC enum
-
-@:enum extern abstract D3D11_COMPARISON_FUNC(NATIVE_D3D11_COMPARISON_FUNC)
-{
-    @:native('D3D11_COMPARISON_NEVER')         var NEVER;
-    @:native('D3D11_COMPARISON_LESS')          var LESS;
-    @:native('D3D11_COMPARISON_EQUAL')         var EQUAL;
-    @:native('D3D11_COMPARISON_LESS_EQUAL')    var LESS_EQUAL;
-    @:native('D3D11_COMPARISON_GREATER')       var GREATER;
-    @:native('D3D11_COMPARISON_NOT_EQUAL')     var NOT_EQUAL;
-    @:native('D3D11_COMPARISON_GREATER_EQUAL') var GREATER_EQUAL;
-    @:native('D3D11_COMPARISON_ALWAYS')        var ALWAYS;
-}
-
-@:native('::cpp::Struct<D3D11_COMPARISON_FUNC, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_COMPARISON_FUNC {}
-
-// D3D11_TEXTURE_ADDRESS_MODE enum
-
-@:enum extern abstract D3D11_TEXTURE_ADDRESS_MODE(NATIVE_D3D11_TEXTURE_ADDRESS_MODE)
-{
-    @:native('D3D11_TEXTURE_ADDRESS_WRAP')        var WRAP;
-    @:native('D3D11_TEXTURE_ADDRESS_MIRROR')      var MIRROR;
-    @:native('D3D11_TEXTURE_ADDRESS_CLAMP')       var CLAMP;
-    @:native('D3D11_TEXTURE_ADDRESS_BORDER')      var BORDER;
-    @:native('D3D11_TEXTURE_ADDRESS_MIRROR_ONCE') var MIRROR_ONCE;
-}
-
-@:native('::cpp::Struct<D3D11_TEXTURE_ADDRESS_MODE, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_TEXTURE_ADDRESS_MODE {}
-
-// D3D11_FILTER enum
-
-@:enum extern abstract D3D11_FILTER(NATIVE_D3D11_FILTER)
-{
-    @:native('D3D11_FILTER_MIN_MAG_MIP_POINT') var MIN_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR') var MIN_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT') var MIN_POINT_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR') var MIN_POINT_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT') var MIN_LINEAR_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR') var MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT') var MIN_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MIN_MAG_MIP_LINEAR') var MIN_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_ANISOTROPIC') var ANISOTROPIC;
-    @:native('D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT') var COMPARISON_MIN_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR') var COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT') var COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR') var COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT') var COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR') var COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT') var COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR') var COMPARISON_MIN_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_COMPARISON_ANISOTROPIC') var COMPARISON_ANISOTROPIC;
-    @:native('D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT') var MINIMUM_MIN_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MINIMUM_MIN_MAG_POINT_MIP_LINEAR') var MINIMUM_MIN_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MINIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT') var MINIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MINIMUM_MIN_POINT_MAG_MIP_LINEAR') var MINIMUM_MIN_POINT_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_MINIMUM_MIN_LINEAR_MAG_MIP_POINT') var MINIMUM_MIN_LINEAR_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MINIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR') var MINIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MINIMUM_MIN_MAG_LINEAR_MIP_POINT') var MINIMUM_MIN_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MINIMUM_MIN_MAG_MIP_LINEAR') var MINIMUM_MIN_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_MINIMUM_ANISOTROPIC') var MINIMUM_ANISOTROPIC;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_MAG_MIP_POINT') var MAXIMUM_MIN_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_MAG_POINT_MIP_LINEAR') var MAXIMUM_MIN_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT') var MAXIMUM_MIN_POINT_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_POINT_MAG_MIP_LINEAR') var MAXIMUM_MIN_POINT_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_LINEAR_MAG_MIP_POINT') var MAXIMUM_MIN_LINEAR_MAG_MIP_POINT;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR') var MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_MAG_LINEAR_MIP_POINT') var MAXIMUM_MIN_MAG_LINEAR_MIP_POINT;
-    @:native('D3D11_FILTER_MAXIMUM_MIN_MAG_MIP_LINEAR') var MAXIMUM_MIN_MAG_MIP_LINEAR;
-    @:native('D3D11_FILTER_MAXIMUM_ANISOTROPIC') var MAXIMUM_ANISOTROPIC;
-}
-
-@:native('::cpp::Struct<D3D11_FILTER, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_FILTER {}
-
-// D3D11_COLOR_WRITE_ENABLE enum
-
-@:enum extern abstract D3D11_COLOR_WRITE_ENABLE(NATIVE_D3D11_COLOR_WRITE_ENABLE)
-{
-    @:native('D3D11_COLOR_WRITE_ENABLE_RED')   var RED;
-    @:native('D3D11_COLOR_WRITE_ENABLE_GREEN') var GREEN;
-    @:native('D3D11_COLOR_WRITE_ENABLE_BLUE')  var BLUE;
-    @:native('D3D11_COLOR_WRITE_ENABLE_ALPHA') var ALPHA;
-    @:native('D3D11_COLOR_WRITE_ENABLE_ALL')   var ALL;
-}
-
-@:native('::cpp::Struct<D3D11_COLOR_WRITE_ENABLE, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_COLOR_WRITE_ENABLE {}
-
-// D3D11_BLEND enum
-
-@:enum extern abstract D3D11_BLEND(NATIVE_D3D11_BLEND)
-{
-    @:native('D3D11_BLEND_ZERO')             var ZERO;
-    @:native('D3D11_BLEND_ONE')              var ONE;
-    @:native('D3D11_BLEND_SRC_COLOR')        var SRC_COLOR;
-    @:native('D3D11_BLEND_INV_SRC_COLOR')    var INV_SRC_COLOR;
-    @:native('D3D11_BLEND_SRC_ALPHA')        var SRC_ALPHA;
-    @:native('D3D11_BLEND_INV_SRC_ALPHA')    var INV_SRC_ALPHA;
-    @:native('D3D11_BLEND_DEST_ALPHA')       var DEST_ALPHA;
-    @:native('D3D11_BLEND_INV_DEST_ALPHA')   var INV_DEST_ALPHA;
-    @:native('D3D11_BLEND_DEST_COLOR')       var DEST_COLOR;
-    @:native('D3D11_BLEND_INV_DEST_COLOR')   var INV_DEST_COLOR;
-    @:native('D3D11_BLEND_SRC_ALPHA_SAT')    var SRC_ALPHA_SAT;
-    @:native('D3D11_BLEND_BLEND_FACTOR')     var BLEND_FACTOR;
-    @:native('D3D11_BLEND_INV_BLEND_FACTOR') var INV_BLEND_FACTOR;
-    @:native('D3D11_BLEND_SRC1_COLOR')       var SRC1_COLOR;
-    @:native('D3D11_BLEND_INV_SRC1_COLOR')   var INV_SRC1_COLOR;
-    @:native('D3D11_BLEND_SRC1_ALPHA')       var SRC1_ALPHA;
-    @:native('D3D11_BLEND_INV_SRC1_ALPHA')   var INV_SRC1_ALPHA;
-}
-
-@:native('::cpp::Struct<D3D11_BLEND, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_BLEND {}
-
-// D3D11_BLEND_OP enum
-
-@:enum extern abstract D3D11_BLEND_OP(NATIVE_D3D11_BLEND_OP)
-{
-    @:native('D3D11_BLEND_OP_ADD')          var ADD;
-    @:native('D3D11_BLEND_OP_SUBTRACT')     var SUBTRACT;
-    @:native('D3D11_BLEND_OP_REV_SUBTRACT') var REV_SUBTRACT;
-    @:native('D3D11_BLEND_OP_MIN')          var MIN;
-    @:native('D3D11_BLEND_OP_MAX')          var MAX;
-}
-
-@:native('::cpp::Struct<D3D11_BLEND_OP, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_BLEND_OP {}
-
-// D3D11_CULL_MODE enum
-
-@:enum extern abstract D3D11_CULL_MODE(NATIVE_D3D11_CULL_MODE)
-{
-    @:native('D3D11_CULL_NONE')  var NONE;
-    @:native('D3D11_CULL_FRONT') var FRONT;
-    @:native('D3D11_CULL_BACK')  var BACK;
-}
-
-@:native('::cpp::Struct<D3D11_CULL_MODE, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_CULL_MODE {}
-
-// D3D11_FILL_MODE enum
-
-@:enum extern abstract D3D11_FILL_MODE(NATIVE_D3D11_FILL_MODE)
-{
-    @:native('D3D11_FILL_WIREFRAME1') var WIREFRAME;
-    @:native('D3D11_FILL_SOLID')      var SOLID;
-}
-
-@:native('::cpp::Struct<D3D11_FILL_MODE, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_FILL_MODE {}
-
-// D3D11_MAP enum
-
-@:enum extern abstract D3D11_MAP(NATIVE_D3D11_MAP)
-{
-    @:native('D3D11_MAP_READ')               var READ;
-    @:native('D3D11_MAP_WRITE')              var WRITE;
-    @:native('D3D11_MAP_READ_WRITE')         var READ_WRITE;
-    @:native('D3D11_MAP_WRITE_DISCARD')      var WRITE_DISCARD;
-    @:native('D3D11_MAP_WRITE_NO_OVERWRITE') var WRITE_NO_OVERWRITE;
-}
-
-@:native('::cpp::Struct<D3D11_MAP, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_MAP {}
-
-// D3D11_INPUT_CLASSIFICATION enum
-
-@:enum extern abstract D3D11_INPUT_CLASSIFICATION(NATIVE_D3D11_INPUT_CLASSIFICATION)
-{
-    @:native('D3D11_INPUT_PER_VERTEX_DATA')   var PER_VERTEX_DATA;
-    @:native('D3D11_INPUT_PER_INSTANCE_DATA') var PER_INSTANCE_DATA;
-}
-
-@:native('::cpp::Struct<D3D11_INPUT_CLASSIFICATION, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_INPUT_CLASSIFICATION {}
-
-// D3D11_USAGE enum
-
-@:enum extern abstract D3D11_USAGE(NATIVE_D3D11_USAGE)
-{
-    @:native('D3D11_USAGE_DEFAULT')   var DEFAULT;
-    @:native('D3D11_USAGE_IMMUTABLE') var IMMUTABLE;
-    @:native('D3D11_USAGE_DYNAMIC')   var DYNAMIC;
-    @:native('D3D11_USAGE_STAGING')   var STAGING;
-}
-
-@:native('::cpp::Struct<D3D11_USAGE, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_USAGE {}
-
-// D3D11_BIND_FLAG enum
-
-@:enum extern abstract D3D11_BIND_FLAG(NATIVE_D3D11_BIND_FLAG)
-{
-    @:native('D3D11_BIND_VERTEX_BUFFER')    var VERTEX_BUFFER;
-    @:native('D3D11_BIND_INDEX_BUFFER')     var INDEX_BUFFER;
-    @:native('D3D11_BIND_CONSTANT_BUFFER')  var CONSTANT_BUFFER;
-    @:native('D3D11_BIND_SHADER_RESOURCE')  var SHADER_RESOURCE;
-    @:native('D3D11_BIND_STREAM_OUTPUT')    var STREAM_OUTPUT;
-    @:native('D3D11_BIND_RENDER_TARGET')    var RENDER_TARGET;
-    @:native('D3D11_BIND_DEPTH_STENCIL')    var DEPTH_STENCIL;
-    @:native('D3D11_BIND_UNORDERED_ACCESS') var UNORDERED_ACCESS;
-    @:native('D3D11_BIND_DECODER')          var BIND_DECODER;
-    @:native('D3D11_BIND_VIDEO_ENCODER')    var VIDEO_ENCODER;
-}
-
-@:native('::cpp::Struct<D3D11_BIND_FLAG, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_BIND_FLAG {}
-
-// D3D11_CPU_ACCESS_FLAG enum
-
-@:enum extern abstract D3D11_CPU_ACCESS_FLAG(NATIVE_D3D11_CPU_ACCESS_FLAG)
-{
-    @:native('D3D11_CPU_ACCESS_WRITE') var WRITE;
-    @:native('D3D11_CPU_ACCESS_READ')  var READ;
-}
-
-@:native('::cpp::Struct<D3D11_CPU_ACCESS_FLAG, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_CPU_ACCESS_FLAG {}
-
-// D3D11_DEPTH_WRITE_MASK enum
-
-@:enum extern abstract D3D11_DEPTH_WRITE_MASK(NATIVE_D3D11_DEPTH_WRITE_MASK)
-{
-    @:native('D3D11_DEPTH_WRITE_MASK_ZERO') var DEPTH_WRITE_MASK_ZERO;
-    @:native('D3D11_DEPTH_WRITE_MASK_ALL') var DEPTH_WRITE_MASK_ALL;
-}
-
-@:native('::cpp::Struct<D3D11_DEPTH_WRITE_MASK, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_DEPTH_WRITE_MASK {}
-
-// D3D11_STENCIL_OP enum
-
-@:enum extern abstract D3D11_STENCIL_OP(NATIVE_D3D11_STENCIL_OP)
-{
-    @:native('D3D11_STENCIL_OP_KEEP') var STENCIL_OP_KEEP;
-    @:native('D3D11_STENCIL_OP_ZERO') var STENCIL_OP_ZERO;
-    @:native('D3D11_STENCIL_OP_REPLACE') var STENCIL_OP_REPLACE;
-    @:native('D3D11_STENCIL_OP_INCR_SAT') var STENCIL_OP_INCR_SAT;
-    @:native('D3D11_STENCIL_OP_DECR_SAT') var STENCIL_OP_DECR_SAT;
-    @:native('D3D11_STENCIL_OP_INVERT') var STENCIL_OP_INVERT;
-    @:native('D3D11_STENCIL_OP_INCR') var STENCIL_OP_INCR;
-    @:native('D3D11_STENCIL_OP_DECR') var STENCIL_OP_DECR;
-}
-
-@:native('::cpp::Struct<D3D11_STENCIL_OP, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_STENCIL_OP {}
-
-// D3D11_DSV_DIMENSION enum
-
-@:enum extern abstract D3D11_DSV_DIMENSION(NATIVE_D3D11_DSV_DIMENSION)
-{
-    @:native('D3D11_DSV_DIMENSION_UNKNOWN') var DSV_DIMENSION_UNKNOWN;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE1D') var DSV_DIMENSION_TEXTURE1D;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE1DARRAY') var DSV_DIMENSION_TEXTURE1DARRAY;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE2D') var DSV_DIMENSION_TEXTURE2D;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE2DARRAY') var DSV_DIMENSION_TEXTURE2DARRAY;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE2DMS') var DSV_DIMENSION_TEXTURE2DMS;
-    @:native('D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY') var DSV_DIMENSION_TEXTURE2DMSARRAY;
-}
-
-@:native('::cpp::Struct<D3D11_DSV_DIMENSION, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D11_DSV_DIMENSION {}
-
-// D3D11_CLEAR_FLAG
-
-enum abstract D3D11_CLEAR_FLAG(cpp.UInt32)
-{
-    var ClearDepth   = 0x1;
-    var ClearStencil = 0x2;
-}
-
-// Static functions
-
+@:keep
 @:unreflective
-@:include("d3d11.h")
-extern class D3D11
+@:structAccess
+@:include('d3d11.h')
+extern class NativeD3D11
 {
-    inline static function createDeviceAndSwapChain(_adapter : Adapter, _description : Star<SwapChainDescription>, _swapchain : Star<SwapChain>, _device : Star<Device>, _context : Star<DeviceContext>) : Int
-    {
-        return untyped __cpp__('D3D11CreateDeviceAndSwapChain(
-            {0},
-            D3D_DRIVER_TYPE_UNKNOWN,
-            NULL,
-            D3D11_CREATE_DEVICE_DEBUG,
-            NULL,
-            NULL,
-            D3D11_SDK_VERSION,
-            {1},
-            (IDXGISwapChain**){2},
-            (ID3D11Device**){3},
-            NULL,
-            (ID3D11DeviceContext**){4})', _adapter, _description, swapchain, device, context);
-    }
-
-    inline static function createDevice(_adapter : Adapter, _device : Star<Device>, _context : Star<DeviceContext>) : Int
-    {
-        return untyped __cpp__('D3D11CreateDevice(
-            {0},
-            D3D_DRIVER_TYPE_UNKNOWN,
-            NULL,
-            0,
-            NULL,
-            NULL,
-            D3D11_SDK_VERSION,
-            {1},
-            NULL,
-            {2})', _adapter, _device, _context);
-    }
+    @:native('D3D11CreateDevice')
+    static function createDevice(
+        _adapter : Star<NativeIDXGIAdapter>,
+        _driverType : NativeD3DDriverType,
+        _software : HMODULE,
+        _flags : cpp.UInt32,
+        _featureLevels : Star<NativeD3DFeatureLevel>,
+        _featureLevelsCount : cpp.UInt32,
+        _sdkVersion : cpp.UInt32,
+        _device : Star<Star<NativeID3D11Device>>,
+        _featureLevel : Star<NativeD3DFeatureLevel>,
+        _immediateContext : Star<Star<NativeID3D11DeviceContext>>
+    ) : Int;
 }

@@ -1,63 +1,65 @@
 package d3dcompiler;
 
+import cpp.Pointer;
+import cpp.ConstCharStar;
+import cpp.SizeT;
 import cpp.Star;
-import d3dcommon.Blob;
+import haxe.io.BytesData;
+import d3dcompiler.structures.D3dShaderMacro;
+import d3dcompiler.interfaces.D3dInclude;
+import d3dcompiler.interfaces.D3dBlob;
 
-// D3DCOMPILER_STRIP_FLAGS
+using cpp.Native;
 
-@:enum extern abstract D3DCOMPILER_STRIP_FLAGS(NATIVE_D3DCOMPILER_STRIP_FLAGS)
+class D3dCompiler
 {
-    @:native('D3DCOMPILER_STRIP_REFLECTION_DATA') var REFLECTION_DATA;
-    @:native('D3DCOMPILER_STRIP_DEBUG_INFO') var DEBUG_INFO;
-    @:native('D3DCOMPILER_STRIP_TEST_BLOBS') var TEST_BLOBS;
-    @:native('D3DCOMPILER_STRIP_PRIVATE_DATA') var PRIVATE_DATA;
-    @:native('D3DCOMPILER_STRIP_ROOT_SIGNATURE') var ROOT_SIGNATURE;
-    @:native('D3DCOMPILER_STRIP_FORCE_DWORD') var FORCE_DWORD;
+    public static function compile(
+        _data : BytesData,
+        _sourceName : Null<String>,
+        _defines : Null<Array<D3dShaderMacro>>,
+        _include : Null<D3dInclude>,
+        _entryPoint : Null<String>,
+        _target : String,
+        _flags1 : Int,
+        _flags2 : Int,
+        _code : D3dBlob,
+        _errors : Null<D3dBlob>
+    ) : Int
+    {
+        return NativeD3DCompiler.compile(
+            (Pointer.arrayElem(_data, 0).reinterpret() : Pointer<cpp.Void>).ptr,
+            _data.length,
+            _sourceName,
+            null,
+            _include == null ? null : (cast _include.ptr : Star<NativeID3DInclude>),
+            _entryPoint,
+            _target,
+            _flags1,
+            _flags2,
+            (cast _code.ptr.addressOf() : Star<Star<NativeID3DBlob>>),
+            _errors == null ? null : (cast _errors.ptr.addressOf() : Star<Star<NativeID3DBlob>>)
+        );
+    }
 }
-
-@:native('::cpp::Struct<D3DCOMPILER_STRIP_FLAGS, ::cpp::EnumHandler>')
-private extern class NATIVE_D3DCOMPILER_STRIP_FLAGS {}
-
-// D3D_BLOB_PART
-
-@:enum extern abstract D3D_BLOB_PART(NATIVE_D3D_BLOB_PART)
-{
-    @:native('D3D_BLOB_INPUT_SIGNATURE_BLOB') var INPUT_SIGNATURE_BLOB;
-    @:native('D3D_BLOB_OUTPUT_SIGNATURE_BLOB') var OUTPUT_SIGNATURE_BLOB;
-    @:native('D3D_BLOB_INPUT_AND_OUTPUT_SIGNATURE_BLOB') var INPUT_AND_OUTPUT_SIGNATURE_BLOB;
-    @:native('D3D_BLOB_PATCH_CONSTANT_SIGNATURE_BLOB') var PATCH_CONSTANT_SIGNATURE_BLOB;
-    @:native('D3D_BLOB_ALL_SIGNATURE_BLOB') var ALL_SIGNATURE_BLOB;
-    @:native('D3D_BLOB_DEBUG_INFO') var DEBUG_INFO;
-    @:native('D3D_BLOB_LEGACY_SHADER') var LEGACY_SHADER;
-    @:native('D3D_BLOB_XNA_PREPASS_SHADER') var XNA_PREPASS_SHADER;
-    @:native('D3D_BLOB_XNA_SHADER') var XNA_SHADER;
-    @:native('D3D_BLOB_PDB') var PDB;
-    @:native('D3D_BLOB_PRIVATE_DATA') var PRIVATE_DATA;
-    @:native('D3D_BLOB_ROOT_SIGNATURE') var ROOT_SIGNATURE;
-    @:native('D3D_BLOB_DEBUG_NAME') var DEBUG_NAME;
-    @:native('D3D_BLOB_TEST_ALTERNATE_SHADER') var TEST_ALTERNATE_SHADER;
-    @:native('D3D_BLOB_TEST_COMPILE_DETAILS') var TEST_COMPILE_DETAILS;
-    @:native('D3D_BLOB_TEST_COMPILE_PERF') var TEST_COMPILE_PERF;
-    @:native('D3D_BLOB_TEST_COMPILE_REPORT') var TEST_COMPILE_REPORT;
-}
-
-@:native('::cpp::Struct<D3D_BLOB_PART, ::cpp::EnumHandler>')
-private extern class NATIVE_D3D_BLOB_PART {}
-
-//
 
 @:keep
 @:unreflective
-@:include("D3Dcompiler.h")
-extern class D3DCompiler
+@:structAccess
+@:include('d3dcompiler.h')
+extern class NativeD3DCompiler
 {
-    inline static function compileFromFile(_filename : String, _entryPoint : String, _target : String, _btyecodeOut : Star<Blob>, _errors : Star<Blob>) : Int
-    {
-        return untyped __cpp__('D3DCompileFromFile({0}.__WCStr(), NULL, NULL, {1}, {2}, 0, 0, {3}, {4})', _filename, _entryPoint, _target, _btyecodeOut, _errors);
-    }
-
-    inline static function compile(_data : String, _entryPoint : String, _target : String, _btyecodeOut : Star<Blob>, _errors : Star<Blob>) : Int
-    {
-        return untyped __cpp__('D3DCompile({0}.c_str(), {1}, NULL, NULL, NULL, {2}, {3}, 0, 0, {4}, {5})', _data, _data.length, _entryPoint, _target, _btyecodeOut, _errors);
-    }
+    @:native('D3DCompile')
+    static function compile(
+        _sourceData : Star<cpp.Void>,
+        _sourceDataSize : SizeT,
+        _sourceName : ConstCharStar,
+        _defines : Star<NativeD3DShaderMacro>,
+        _include : Star<NativeID3DInclude>,
+        _entryPoint : ConstCharStar,
+        _target : ConstCharStar,
+        _flags1 : cpp.UInt32,
+        _flags2 : cpp.UInt32,
+        _code : Star<Star<NativeID3DBlob>>,
+        _errors : Star<Star<NativeID3DBlob>>
+    ) : Int;
 }
