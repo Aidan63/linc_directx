@@ -1,0 +1,8 @@
+-cpp out
+
+-lib safety
+-lib linc_sdl
+
+-cp ./
+
+-main Test
