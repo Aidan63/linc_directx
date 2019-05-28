@@ -1,4 +1,4 @@
-package d3d11.enumerations;
+package d3dcommon.enumerations;
 
 /**
  * Driver type options.

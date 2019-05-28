@@ -5,9 +5,9 @@ import cpp.ConstCharStar;
 import cpp.SizeT;
 import cpp.Star;
 import haxe.io.BytesData;
-import d3dcompiler.structures.D3dShaderMacro;
-import d3dcompiler.interfaces.D3dInclude;
-import d3dcompiler.interfaces.D3dBlob;
+import d3dcommon.structures.D3dShaderMacro;
+import d3dcommon.interfaces.D3dInclude;
+import d3dcommon.interfaces.D3dBlob;
 
 using cpp.Native;
 

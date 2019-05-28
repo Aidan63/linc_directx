@@ -6,10 +6,10 @@ import com.HMODULE;
 import dxgi.interfaces.DxgiAdapter;
 import d3d11.interfaces.D3d11Device;
 import d3d11.interfaces.D3d11DeviceContext;
-import d3d11.enumerations.D3dDriverType;
-import d3d11.enumerations.D3dFeatureLevel;
 import d3d11.enumerations.D3d11CreateDeviceFlags;
 import d3d11.constants.D3d11Error;
+import d3dcommon.enumerations.D3dFeatureLevel;
+import d3dcommon.enumerations.D3dDriverType;
 
 using cpp.Native;
 

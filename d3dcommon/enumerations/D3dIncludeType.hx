@@ -1,4 +1,4 @@
-package d3dcompiler.enumerations;
+package d3dcommon.enumerations;
 
 /**
  * Values that indicate the location of a shader #include file.

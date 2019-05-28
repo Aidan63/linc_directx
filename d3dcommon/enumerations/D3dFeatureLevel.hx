@@ -1,4 +1,4 @@
-package d3d11.enumerations;
+package d3dcommon.enumerations;
 
 /**
  * Describes the set of features targeted by a Direct3D device.

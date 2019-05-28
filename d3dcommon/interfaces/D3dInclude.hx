@@ -1,4 +1,4 @@
-package d3dcompiler.interfaces;
+package d3dcommon.interfaces;
 
 import cpp.Pointer;
 import cpp.ConstCharStar;
@@ -6,7 +6,7 @@ import cpp.Star;
 import cpp.ConstPointer;
 import com.Unknown;
 import com.LPCVOID;
-import d3dcompiler.enumerations.D3dIncludeType;
+import d3dcommon.enumerations.D3dIncludeType;
 
 using cpp.Native;
 

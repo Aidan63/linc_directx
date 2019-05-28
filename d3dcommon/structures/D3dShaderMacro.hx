@@ -1,4 +1,4 @@
-package d3dcompiler.structures;
+package d3dcommon.structures;
 
 import cpp.Function;
 import cpp.vm.Gc;

@@ -19,6 +19,8 @@ class Dxgi
         return NativeDXGI.createFactory(NativeIDXGIFactory.uuid(), cast _factory.ptr.addressOf());
     }
 
+#if (dxgi_feature_level >= 1.1)
+
     /**
      * Creates a DXGI 1.1 factory that you can use to generate other DXGI objects.
      * @param _factory Address of a pointer to an IDXGIFactory1 object.
@@ -28,6 +30,8 @@ class Dxgi
     {
         return NativeDXGI.createFactory1(NativeIDXGIFactory1.uuid(), cast _factory.ptr.addressOf());
     }
+
+#end
 }
 
 @:keep

@@ -1,4 +1,4 @@
-package d3dcompiler.interfaces;
+package d3dcommon.interfaces;
 
 import cpp.Star;
 import cpp.Pointer;
