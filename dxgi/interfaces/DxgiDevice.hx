@@ -1,6 +1,8 @@
 package dxgi.interfaces;
 
-class DxgiDevice
+import dxgi.interfaces.DxgiObject;
+
+class DxgiDevice extends DxgiObject
 {
     //
 }

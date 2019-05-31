@@ -68,3 +68,36 @@ extern class NativeIDXGIAdapter extends NativeIDXGIObject
     @:native('EnumOutputs')
     function enumOutputs(_output : cpp.UInt32, _ptr : Star<Star<NativeIDXGIOutput>>) : Int;
 }
+
+#if (dxgi_feature_level >= 1.1)
+
+/**
+ * The `IDXGIAdapter1` interface represents a display sub-system (including one or more GPU's, DACs and video memory).
+ */
+class DxgiAdapter1 extends DxgiAdapter
+{
+    /**
+     * Gets a DXGI 1.1 description of an adapter (or video card).
+     * @param _desc A pointer to a `DXGI_ADAPTER_DESC1` structure that describes the adapter.
+     * This parameter must not be NULL.
+     * On feature level 9 graphics hardware, GetDesc1 returns zeros for the PCI ID in the VendorId, DeviceId, SubSysId, and Revision members of `DXGI_ADAPTER_DESC1` and “Software Adapter” for the description string in the Description member.
+     * @return Returns S_OK if successful; otherwise, returns `E_INVALIDARG` if the pDesc parameter is NULL.
+     */
+    public function getDesc1(_desc : DxgiAdapterDescription1) : DxgiError
+    {
+        return (cast ptr : Star<NativeIDXGIAdapter1>).getDesc1(_desc.backing);
+    }
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:native("IDXGIAdapter1")
+@:include("dxgi.h")
+extern class NativeIDXGIAdapter1 extends NativeIDXGIAdapter
+{
+    @:native('GetDesc1')
+    function getDesc1(_desc : Star<NativeDXGIAdapterDescription1>) : Int;
+}
+
+#end

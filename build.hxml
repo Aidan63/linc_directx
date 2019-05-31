@@ -3,6 +3,8 @@
 -lib safety
 -lib linc_sdl
 
+-D dxgi_feature_level=1.1
+
 -cp ./
 
 -main Test
