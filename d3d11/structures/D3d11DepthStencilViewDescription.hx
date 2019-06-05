@@ -94,6 +94,8 @@ class D3d11DepthStencilViewDescription
         if (_existing == null)
         {
             backing = NativeD3D11DepthStencilViewDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
         }
         else
         {
@@ -106,8 +108,6 @@ class D3d11DepthStencilViewDescription
         texture2DArray   = new D3d11Tex2DArrayDsv(Pointer.addressOf(backing.texture2DArray));
         texture2DMS      = new D3d11Tex2DMSDsv(Pointer.addressOf(backing.texture2DMS));
         texture2DMSArray = new D3d11Tex2DMSArrayDsv(Pointer.addressOf(backing.texture2DMSArray));
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
     }
 
     @:void

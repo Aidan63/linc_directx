@@ -63,7 +63,10 @@ class Unknown
      */
     @:void static function finalize(_obj : Unknown)
     {
-        _obj.release();
+        if (_obj.ptr != null)
+        {
+            _obj.release();
+        }
     }
 }
 

@@ -92,6 +92,8 @@ class DxgiModeDescription
         if (_existing == null)
         {
             backing = NativeDXGIModeDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
@@ -99,8 +101,6 @@ class DxgiModeDescription
         }
 
         refreshRate = new DxgiRational(Pointer.addressOf(backing.refreshRate));
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

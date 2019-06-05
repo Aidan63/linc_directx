@@ -75,13 +75,13 @@ class D3d11DepthStencilOpDescription
         if (_existing == null)
         {
             backing = NativeD3D11DepthStencilOpDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
     }
 
     @:void

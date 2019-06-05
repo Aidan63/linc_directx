@@ -110,13 +110,13 @@ class DxgiAdapterDescription
         if (_existing == null)
         {
             backing = NativeDXGIAdapterDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

@@ -73,13 +73,13 @@ class D3d11Viewport
         if (_existing == null)
         {
             backing = NativeD3D11Viewport.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

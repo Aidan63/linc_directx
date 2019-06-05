@@ -1,5 +1,6 @@
 package utils;
 
+import cpp.RawPointer;
 import cpp.Reference;
 import cpp.Star;
 
@@ -11,6 +12,9 @@ import cpp.Star;
 extern class StdVector<T>
 {
     function data() : Star<T>;
+
+    @:native('data')
+    function raw() : RawPointer<T>;
 
     function at(_index : Int) : Reference<T>;
 

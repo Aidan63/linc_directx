@@ -1,5 +1,6 @@
 package d3d11.interfaces;
 
+import d3dcommon.interfaces.D3dBlob;
 import utils.StdVector;
 import d3d11.interfaces.D3d11DepthStencilState.NativeID3D11DepthStencilState;
 import d3d11.structures.D3d11DepthStencilDescription;
@@ -197,14 +198,15 @@ class D3d11Device extends Unknown
      * @param _inputLayout A pointer to the input-layout object created (see `ID3D11InputLayout`). To validate the other input parameters, set this pointer to be NULL and verify that the method returns `S_FALSE`.
      * @return If the method succeeds, the return code is `S_OK`. See Direct3D 11 Return Codes for failing error codes.
      */
-    public function createInputLayout(_inputElementDescriptions : Array<D3d11InputElementDescription>, _shaderBytecodeWithInputSignature : ConstPointer<cpp.Void>, _bytecodeLength : Int, _inputLayout : D3d11InputLayout) : D3d11Error
+    public function createInputLayout(_inputElementDescriptions : Array<D3d11InputElementDescription>, _blob : D3dBlob, _inputLayout : D3d11InputLayout) : D3d11Error
     {
         for (i in 0..._inputElementDescriptions.length)
         {
-            vectorInputLayout.set(i, _inputElementDescriptions[i].backing);
+            //vectorInputLayout.set(i, _inputElementDescriptions[i].backing);
+            vectorInputLayout.raw()[i] = _inputElementDescriptions[i].backing;
         }        
 
-        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _shaderBytecodeWithInputSignature.ptr, _bytecodeLength, cast _inputLayout.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _blob.getBufferPointer().ptr, _blob.getBufferSize(), cast _inputLayout.addressOf());
     }
 
     /**

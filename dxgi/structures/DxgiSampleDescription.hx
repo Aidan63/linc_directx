@@ -52,13 +52,13 @@ class DxgiSampleDescription
         if (_existing == null)
         {
             backing = NativeDXGISampleDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

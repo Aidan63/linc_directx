@@ -56,13 +56,13 @@ class D3d11SubResourceData
         if (_existing == null)
         {
             backing = NativeD3D11SubResourceData.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

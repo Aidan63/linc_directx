@@ -94,6 +94,8 @@ class D3d11DepthStencilDescription
         if (_existing == null)
         {
             backing = NativeD3D11DepthStencilDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
         }
         else
         {
@@ -102,8 +104,6 @@ class D3d11DepthStencilDescription
 
         frontFace = new D3d11DepthStencilOpDescription(Pointer.addressOf(backing.frontFace));
         backFace  = new D3d11DepthStencilOpDescription(Pointer.addressOf(backing.backFace));
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalise));
     }
 
     @:void

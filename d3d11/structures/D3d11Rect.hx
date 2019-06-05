@@ -53,13 +53,13 @@ class D3d11Rect
         if (_existing == null)
         {
             backing = NativeD3D11Rect.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

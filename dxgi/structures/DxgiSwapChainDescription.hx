@@ -101,6 +101,8 @@ class DxgiSwapChainDescription
         if (_existing == null)
         {
             backing = NativeDXGISwapChainDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
@@ -109,8 +111,6 @@ class DxgiSwapChainDescription
 
         bufferDesc = new DxgiModeDescription(Pointer.addressOf(backing.bufferDesc));
         sampleDesc = new DxgiSampleDescription(Pointer.addressOf(backing.sampleDesc));
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

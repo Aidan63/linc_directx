@@ -41,13 +41,13 @@ class DxgiRational
         if (_existing == null)
         {
             backing = NativeDXGIRational.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

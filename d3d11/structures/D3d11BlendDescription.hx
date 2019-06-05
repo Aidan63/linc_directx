@@ -44,6 +44,8 @@ class D3d11BlendDescription
         if (_existing == null)
         {
             backing = NativeD3D11BlendDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
@@ -51,8 +53,6 @@ class D3d11BlendDescription
         }
 
         renderTarget = [ for (i in 0...8) new D3d11RenderTargetBlendDescription(Pointer.addressOf(backing.renderTarget[i])) ];
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

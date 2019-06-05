@@ -87,7 +87,7 @@ class D3d11InputElementDescription
      * The number of instances to draw using the same per-instance data before advancing in the buffer by one element.
      * This value must be 0 for an element that contains per-vertex data (the slot class is set to `D3D11_INPUT_PER_VERTEX_DATA`).
      */
-    public var instanceDataStepRate : Int;
+    public var instanceDataStepRate (get, set) : Int;
 
     inline function get_instanceDataStepRate() : Int return backing.instanceDataStepRate;
 
@@ -98,13 +98,13 @@ class D3d11InputElementDescription
         if (_existing == null)
         {
             backing = NativeD3D11InputElementDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

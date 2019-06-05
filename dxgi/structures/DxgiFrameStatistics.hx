@@ -1,5 +1,7 @@
 package dxgi.structures;
 
+import cpp.Function;
+import cpp.vm.Gc;
 import haxe.Int64;
 import cpp.Pointer;
 import cpp.Star;
@@ -26,6 +28,8 @@ class DxgiFrameStatistics
         if (_existing == null)
         {
             backing = NativeDXGIFrameStatistics.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {

@@ -26,13 +26,13 @@ class D3d11Tex1DDsv
         if (_existing == null)
         {
             backing = NativeD3D11Tex1DDsv.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

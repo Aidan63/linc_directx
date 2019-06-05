@@ -128,6 +128,8 @@ class D3d11Texture2DDescription
         if (_existing == null)
         {
             backing = NativeD3D11Texture2DDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
@@ -135,8 +137,6 @@ class D3d11Texture2DDescription
         }
 
         sampleDesc = new DxgiSampleDescription(Pointer.addressOf(backing.sampleDesc));
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

@@ -136,6 +136,8 @@ class D3d11SamplerDescription
         if (_existing == null)
         {
             backing = NativeD3D11SamplerDescription.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
@@ -143,8 +145,6 @@ class D3d11SamplerDescription
         }
 
         borderColor = Pointer.fromRaw(backing.borderColor);
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void

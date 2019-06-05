@@ -36,13 +36,13 @@ class D3dShaderMacro
         if (_existing == null)
         {
             backing = NativeD3DShaderMacro.createPtr();
+
+            Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
         }
         else
         {
             backing = _existing.ptr;
         }
-
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     @:void
