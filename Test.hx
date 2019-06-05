@@ -1,5 +1,6 @@
 package;
 
+import d3d11.interfaces.D3d11RenderTargetView;
 import cpp.Pointer;
 import d3d11.structures.D3d11MappedSubResource;
 import d3d11.interfaces.D3d11DepthStencilView;
@@ -47,20 +48,22 @@ class Test
         new Test();
     }
 
-    final window    : Window;
-    final factory   : DxgiFactory;
-    final adapter   : DxgiAdapter;
-    final output    : DxgiOutput;
-    final swapchain : DxgiSwapChain;
-    final device    : D3d11Device;
-    final context   : D3d11DeviceContext;
-    final rasterize : D3d11RasterizerState;
-    final viewport  : D3d11Viewport;
-    final clipRect  : D3d11Rect;
-    final blending  : D3d11BlendState;
-    final buffer    : D3d11Buffer;
-    final depthTex  : D3d11Texture2D;
-    final dsvView   : D3d11DepthStencilView;
+    final window     : Window;
+    final factory    : DxgiFactory;
+    final adapter    : DxgiAdapter;
+    final output     : DxgiOutput;
+    final swapchain  : DxgiSwapChain;
+    final device     : D3d11Device;
+    final context    : D3d11DeviceContext;
+    final rasterize  : D3d11RasterizerState;
+    final viewport   : D3d11Viewport;
+    final clipRect   : D3d11Rect;
+    final blending   : D3d11BlendState;
+    final buffer     : D3d11Buffer;
+    final depthTex   : D3d11Texture2D;
+    final swapTex    : D3d11Texture2D;
+    final dsvView    : D3d11DepthStencilView;
+    final renderView : D3d11RenderTargetView;
 
     public function new()
     {
@@ -232,6 +235,22 @@ class Test
         (mappedBuffer.data.reinterpret() : Pointer<Int>)[0] = 7;
 
         context.unmap(buffer, 0);
+
+        swapTex = new D3d11Texture2D();
+        if (swapchain.getBuffer(0, NativeID3D11Texture2D.uuid(), swapTex) != Ok)
+        {
+            throw 'failed to get swapchain texture';
+        }
+
+        renderView = new D3d11RenderTargetView();
+        if (device.createRenderTargetView(swapTex, null, renderView) != Ok)
+        {
+            throw 'failed to create render target view';
+        }
+
+        context.omSetRenderTargets([ renderView ], dsvView);
+        context.iaSetVertexBuffers(0, [ buffer ], [ 0 ], [ 0 ]);
+        context.rsSetViewports([ viewport ]);
 
         trace('done');
     }

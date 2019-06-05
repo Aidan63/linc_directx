@@ -1,5 +1,6 @@
 package d3d11.interfaces;
 
+import utils.StdVector;
 import d3d11.interfaces.D3d11DepthStencilState.NativeID3D11DepthStencilState;
 import d3d11.structures.D3d11DepthStencilDescription;
 import cpp.Pointer;
@@ -40,6 +41,15 @@ using cpp.Native;
  */
 class D3d11Device extends Unknown
 {
+    final vectorInputLayout : StdVectorInputElementDescription;
+
+    public function new()
+    {
+        super();
+
+        vectorInputLayout = StdVectorInputElementDescription.create(32);
+    }
+
     /**
      * Create a rasterizer state object that tells the rasterizer stage how to behave.
      * @param _description Pointer to a rasterizer state description (see `D3D11_RASTERIZER_DESC`).
@@ -160,9 +170,9 @@ class D3d11Device extends Unknown
      * If this is NULL, all other parameters will be validated, and if all parameters pass validation this API will return `S_FALSE` instead of `S_OK`.
      * @return This method returns one of the Direct3D 11 Return Codes.
      */
-    public function createVertexShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : D3d11ClassLinkage, _vertexShader : D3d11VertexShader) : D3d11Error
+    public function createVertexShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : Null<D3d11ClassLinkage>, _vertexShader : D3d11VertexShader) : D3d11Error
     {
-        return (cast ptr : Star<NativeID3D11Device>).createVertexShader(_shaderBytecode.ptr, _bytecodeLength, cast _classLinkage.ptr, cast _vertexShader.ptr.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createVertexShader(_shaderBytecode.ptr, _bytecodeLength, _classLinkage == null ? null : cast _classLinkage.ptr, cast _vertexShader.ptr.addressOf());
     }
 
     /**
@@ -174,9 +184,9 @@ class D3d11Device extends Unknown
      * If this is NULL, all other parameters will be validated, and if all parameters pass validation this API will return `S_FALSE` instead of `S_OK`.
      * @return This method returns one of the following Direct3D 11 Return Codes.
      */
-    public function createPixelShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : D3d11ClassLinkage, _pixelShader : D3d11PixelShader) : D3d11Error
+    public function createPixelShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : Null<D3d11ClassLinkage>, _pixelShader : D3d11PixelShader) : D3d11Error
     {
-        return (cast ptr : Star<NativeID3D11Device>).createPixelShader(_shaderBytecode.ptr, _bytecodeLength, cast _classLinkage.ptr, cast _pixelShader.ptr.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createPixelShader(_shaderBytecode.ptr, _bytecodeLength, _classLinkage == null ? null : cast _classLinkage.ptr, cast _pixelShader.ptr.addressOf());
     }
 
     /**
@@ -189,13 +199,12 @@ class D3d11Device extends Unknown
      */
     public function createInputLayout(_inputElementDescriptions : Array<D3d11InputElementDescription>, _shaderBytecodeWithInputSignature : ConstPointer<cpp.Void>, _bytecodeLength : Int, _inputLayout : D3d11InputLayout) : D3d11Error
     {
-        var structArray = new Vector<cpp.Reference<NativeD3D11InputElementDescription>>(_inputElementDescriptions.length);
         for (i in 0..._inputElementDescriptions.length)
         {
-            structArray[i] = _inputElementDescriptions[i].backing;
-        }
+            vectorInputLayout.set(i, _inputElementDescriptions[i].backing);
+        }        
 
-        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(Pointer.arrayElem(cast structArray, 0).ptr, structArray.length, _shaderBytecodeWithInputSignature.ptr, _bytecodeLength, cast _inputLayout.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _shaderBytecodeWithInputSignature.ptr, _bytecodeLength, cast _inputLayout.addressOf());
     }
 
     /**
@@ -257,4 +266,15 @@ extern class NativeID3D11Device extends NativeIUnknown
 
     @:native('CreateDepthStencilState')
     function createDepthStencilState(_desciption : Star<NativeD3D11DepthStencilDescription>, _state : Star<Star<NativeID3D11DepthStencilState>>) : Int;
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:include('d3d11.h')
+@:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
+private extern class StdVectorInputElementDescription extends StdVector<NativeD3D11InputElementDescription>
+{
+    @:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
+    static function create(_capacity : Int) : StdVectorInputElementDescription;
 }
