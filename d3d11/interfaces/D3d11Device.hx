@@ -1,5 +1,6 @@
 package d3d11.interfaces;
 
+import cpp.RawPointer;
 import cpp.Star;
 import cpp.ConstPointer;
 import com.GUID;
@@ -39,13 +40,13 @@ using cpp.Native;
  */
 class D3d11Device extends Unknown
 {
-    final vectorInputLayout : StdVectorInputElementDescription;
+    final vectorInputLayout : InputElementDescriptionVector;
 
     public function new()
     {
         super();
 
-        vectorInputLayout = StdVectorInputElementDescription.create();
+        vectorInputLayout = new InputElementDescriptionVector(32);
     }
 
     /**
@@ -199,7 +200,7 @@ class D3d11Device extends Unknown
     {
         for (i in 0..._inputElementDescriptions.length)
         {           
-            vectorInputLayout.push_back(_inputElementDescriptions[i].backing);
+            vectorInputLayout[i] = _inputElementDescriptions[i].backing;
         }
 
         return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _blob.getBufferPointer().ptr, _blob.getBufferSize(), cast _inputLayout.ptr.addressOf());
@@ -271,14 +272,40 @@ extern class NativeID3D11Device extends NativeIUnknown
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
-private extern class StdVectorInputElementDescription
+private extern class StdVectorInputElementDescriptionImpl
 {
     @:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
-    static function create() : StdVectorInputElementDescription;
+    static function create(_count : Int) : StdVectorInputElementDescriptionImpl;
 
     function data() : Star<NativeD3D11InputElementDescription>;
 
     function push_back(_item : NativeD3D11InputElementDescription) : Void;
 
     function clear() : Void;
+
+    @:native('data')
+    function ptr() : RawPointer<NativeD3D11InputElementDescription>;
+}
+
+@:forward(data, push_back, clear)
+abstract InputElementDescriptionVector(StdVectorInputElementDescriptionImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorInputElementDescriptionImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : NativeD3D11InputElementDescription
+    {
+        return this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : NativeD3D11InputElementDescription) : NativeD3D11InputElementDescription
+    {
+        this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
