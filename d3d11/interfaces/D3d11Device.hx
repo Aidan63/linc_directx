@@ -168,9 +168,9 @@ class D3d11Device extends Unknown
      * If this is NULL, all other parameters will be validated, and if all parameters pass validation this API will return `S_FALSE` instead of `S_OK`.
      * @return This method returns one of the Direct3D 11 Return Codes.
      */
-    public function createVertexShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : Null<D3d11ClassLinkage>, _vertexShader : D3d11VertexShader) : D3d11Error
+    public function createVertexShader(_blob : D3dBlob, _classLinkage : Null<D3d11ClassLinkage>, _vertexShader : D3d11VertexShader) : D3d11Error
     {
-        return (cast ptr : Star<NativeID3D11Device>).createVertexShader(_shaderBytecode.ptr, _bytecodeLength, _classLinkage == null ? null : cast _classLinkage.ptr, cast _vertexShader.ptr.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createVertexShader(_blob.getBufferPointer().ptr, _blob.getBufferSize(), _classLinkage == null ? null : cast _classLinkage.ptr, cast _vertexShader.ptr.addressOf());
     }
 
     /**
@@ -182,9 +182,9 @@ class D3d11Device extends Unknown
      * If this is NULL, all other parameters will be validated, and if all parameters pass validation this API will return `S_FALSE` instead of `S_OK`.
      * @return This method returns one of the following Direct3D 11 Return Codes.
      */
-    public function createPixelShader(_shaderBytecode : ConstPointer<cpp.Void>, _bytecodeLength : Int, _classLinkage : Null<D3d11ClassLinkage>, _pixelShader : D3d11PixelShader) : D3d11Error
+    public function createPixelShader(_blob : D3dBlob, _classLinkage : Null<D3d11ClassLinkage>, _pixelShader : D3d11PixelShader) : D3d11Error
     {
-        return (cast ptr : Star<NativeID3D11Device>).createPixelShader(_shaderBytecode.ptr, _bytecodeLength, _classLinkage == null ? null : cast _classLinkage.ptr, cast _pixelShader.ptr.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createPixelShader(_blob.getBufferPointer().ptr, _blob.getBufferSize(), _classLinkage == null ? null : cast _classLinkage.ptr, cast _pixelShader.ptr.addressOf());
     }
 
     /**
