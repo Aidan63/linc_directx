@@ -3,7 +3,7 @@ package d3d11.enumerations;
 /**
  * Describes parameters that are used to create a device.
  */
-enum abstract D3d11CreateDeviceFlags(Int) to Int
+enum abstract D3d11CreateDeviceFlags(Int) from Int to Int
 {
     /**
      * No creation flags have been specified.

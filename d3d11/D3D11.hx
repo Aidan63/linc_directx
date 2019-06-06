@@ -48,7 +48,7 @@ class D3d11
         _adapter : Null<DxgiAdapter>,
         _driverType : D3dDriverType,
         _software : Null<HMODULE>,
-        _flags : D3d11CreateDeviceFlags,
+        _flags : Int,
         _featureLevels : Null<Array<D3dFeatureLevel>>,
         _sdkVersion : Int,
         _device : Null<D3d11Device>,

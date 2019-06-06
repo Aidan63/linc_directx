@@ -279,16 +279,12 @@ private extern class StdVectorInputElementDescriptionImpl
 
     function data() : Star<NativeD3D11InputElementDescription>;
 
-    function push_back(_item : NativeD3D11InputElementDescription) : Void;
-
-    function clear() : Void;
-
     @:native('data')
-    function ptr() : RawPointer<NativeD3D11InputElementDescription>;
+    private function ptr() : RawPointer<NativeD3D11InputElementDescription>;
 }
 
-@:forward(data, push_back, clear)
-abstract InputElementDescriptionVector(StdVectorInputElementDescriptionImpl)
+@:forward()
+private abstract InputElementDescriptionVector(StdVectorInputElementDescriptionImpl)
 {
     public function new(_count : Int)
     {
@@ -298,13 +294,13 @@ abstract InputElementDescriptionVector(StdVectorInputElementDescriptionImpl)
     @:arrayAccess
     inline function arrayGet(_key : Int) : NativeD3D11InputElementDescription
     {
-        return this.ptr()[_key];
+        return @:privateAccess this.ptr()[_key];
     }
 
     @:arrayAccess
     inline function arraySet(_key : Int, _value : NativeD3D11InputElementDescription) : NativeD3D11InputElementDescription
     {
-        this.ptr()[_key] = _value;
+        @:privateAccess this.ptr()[_key] = _value;
 
         return _value;
     }

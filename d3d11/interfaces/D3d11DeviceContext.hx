@@ -1,5 +1,6 @@
 package d3d11.interfaces;
 
+import cpp.RawPointer;
 import cpp.Pointer;
 import cpp.Star;
 import cpp.Float32;
@@ -30,32 +31,32 @@ class D3d11DeviceContext extends Unknown
 {
     final clearColour : Array<Float32>;
 
-    final vectorRenderTargetView : StdVectorRenderTargetView;
+    final vectorRenderTargetView : RenderTargetViewVector;
 
-    final vectorBuffer : StdVectorBuffer;
+    final vectorBuffer : BufferVector;
 
-    final vectorClassInstance : StdVectorClassInstance;
+    final vectorClassInstance : ClassInstanceVector;
 
-    final vectorSamplerState : StdVectorSamplerState;
+    final vectorSamplerState : SamplerStateVector;
 
-    final vectorShaderResourceView : StdVectorShaderResourceView;
+    final vectorShaderResourceView : ShaderResourceViewVector;
 
-    final vectorViewport : StdVectorViewport;
+    final vectorViewport : ViewportVector;
 
-    final vectorRect : StdVectorRect;
+    final vectorRect : RectVector;
 
     public function new()
     {
         super();
 
         clearColour              = [ 0, 0, 0, 0 ];
-        vectorRenderTargetView   = StdVectorRenderTargetView.create();
-        vectorBuffer             = StdVectorBuffer.create();
-        vectorClassInstance      = StdVectorClassInstance.create();
-        vectorSamplerState       = StdVectorSamplerState.create();
-        vectorShaderResourceView = StdVectorShaderResourceView.create();
-        vectorViewport           = StdVectorViewport.create();
-        vectorRect               = StdVectorRect.create();
+        vectorRenderTargetView   = new RenderTargetViewVector(32);
+        vectorBuffer             = new BufferVector(32);
+        vectorClassInstance      = new ClassInstanceVector(32);
+        vectorSamplerState       = new SamplerStateVector(32);
+        vectorShaderResourceView = new ShaderResourceViewVector(32);
+        vectorViewport           = new ViewportVector(32);
+        vectorRect               = new RectVector(32);
     }
 
     /**
@@ -141,12 +142,10 @@ class D3d11DeviceContext extends Unknown
         {
             for (i in 0..._renderTargetViews.length)
             {
-                vectorRenderTargetView.push_back(cast _renderTargetViews[i].ptr);
+                vectorRenderTargetView[i] = cast _renderTargetViews[i].ptr;
             }
 
             (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(_renderTargetViews.length, vectorRenderTargetView.data(), null);
-
-            vectorRenderTargetView.clear();
         }
         else
         {
@@ -223,12 +222,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._buffers.length)
         {
-            vectorBuffer.push_back(cast _buffers[i].ptr);
+            vectorBuffer[i] = cast _buffers[i].ptr;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).iaSetVertexBuffers(_startSlot, _buffers.length, vectorBuffer.data(), cast Pointer.arrayElem(_strides, 0).ptr, cast Pointer.arrayElem(_offsets, 0).ptr);
-
-        vectorBuffer.clear();
     }
 
     /**
@@ -239,12 +236,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._viewports.length)
         {
-            vectorViewport.push_back(_viewports[i].backing);
+            vectorViewport[i] = _viewports[i].backing;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).rsSetViewports(_viewports.length, vectorViewport.data());
-
-        vectorBuffer.clear();
     }
 
     /**
@@ -255,12 +250,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._rects.length)
         {
-            vectorRect.push_back(_rects[i].backing);
+            vectorRect[i] = _rects[i].backing;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).rsSetScissorRects(_rects.length, vectorRect.data());
-
-        vectorRect.clear();
     }
 
     /**
@@ -284,12 +277,10 @@ class D3d11DeviceContext extends Unknown
         {
             for (i in 0..._classInstances.length)
             {
-                vectorClassInstance.push_back(cast _classInstances[i].ptr);
+                vectorClassInstance[i] = cast _classInstances[i].ptr;
             }
 
             (cast ptr : Star<NativeID3D11DeviceContext>).vsSetShader(cast _vertexShader.ptr, vectorClassInstance.data(), _classInstances.length);
-
-            vectorClassInstance.clear();
         }
         else
         {
@@ -308,12 +299,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._buffers.length)
         {
-            vectorBuffer.push_back(cast _buffers[i].ptr);
+            vectorBuffer[i] = cast _buffers[i].ptr;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).vsSetConstantBuffers(_startSlot, _buffers.length, vectorBuffer.data());
-
-        vectorBuffer.clear();
     }
 
     /**
@@ -328,12 +317,10 @@ class D3d11DeviceContext extends Unknown
         {
             for (i in 0..._classInstances.length)
             {
-                vectorClassInstance.push_back(cast _classInstances[i].ptr);
+                vectorClassInstance[i] = cast _classInstances[i].ptr;
             }
 
             (cast ptr : Star<NativeID3D11DeviceContext>).psSetShader(cast _pixelShader.ptr, vectorClassInstance.data(), _classInstances.length);
-
-            vectorClassInstance.clear();
         }
         else
         {
@@ -352,12 +339,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._buffers.length)
         {
-            vectorBuffer.push_back(cast _buffers[i].ptr);
+            vectorBuffer[i] = cast _buffers[i].ptr;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).psSetConstantBuffers(_startSlot, _buffers.length, vectorBuffer.data());
-
-        vectorBuffer.clear();
     }
 
     /**
@@ -369,12 +354,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._samplers.length)
         {
-            vectorSamplerState.push_back(cast _samplers[i].ptr);
+            vectorSamplerState[i] = cast _samplers[i].ptr;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).psSetSamplers(_startSlot, _samplers.length, vectorSamplerState.data());
-
-        vectorSamplerState.clear();
     }
 
     /**
@@ -386,12 +369,10 @@ class D3d11DeviceContext extends Unknown
     {
         for (i in 0..._shaderResourceViews.length)
         {
-            vectorShaderResourceView.push_back(cast _shaderResourceViews[i].ptr);
+            vectorShaderResourceView[i] = cast _shaderResourceViews[i].ptr;
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).psSetShaderResources(_startSlot, _shaderResourceViews.length, vectorShaderResourceView.data());
-
-        vectorShaderResourceView.clear();
     }
 }
 
@@ -479,16 +460,38 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<ID3D11RenderTargetView*>')
-private extern class StdVectorRenderTargetView
+private extern class StdVectorRenderTargetViewImpl
 {
     @:native('std::vector<ID3D11RenderTargetView*>')
-    static function create() : StdVectorRenderTargetView;
+    static function create(_count : Int) : StdVectorRenderTargetViewImpl;
 
     function data() : Star<Star<NativeID3D11RenderTargetView>>;
 
-    function push_back(_item : Star<NativeID3D11RenderTargetView>) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<Star<NativeID3D11RenderTargetView>>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract RenderTargetViewVector(StdVectorRenderTargetViewImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorRenderTargetViewImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : Star<NativeID3D11RenderTargetView>
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : Star<NativeID3D11RenderTargetView>) : Star<NativeID3D11RenderTargetView>
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -496,16 +499,38 @@ private extern class StdVectorRenderTargetView
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<ID3D11Buffer*>')
-private extern class StdVectorBuffer
+private extern class StdVectorBufferImple
 {
     @:native('std::vector<ID3D11Buffer*>')
-    static function create() : StdVectorBuffer;
+    static function create(_count : Int) : StdVectorBufferImple;
 
     function data() : Star<Star<NativeID3D11Buffer>>;
 
-    function push_back(_item : Star<NativeID3D11Buffer>) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<Star<NativeID3D11Buffer>>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract BufferVector(StdVectorBufferImple)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorBufferImple.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : Star<NativeID3D11Buffer>
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : Star<NativeID3D11Buffer>) : Star<NativeID3D11Buffer>
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -513,16 +538,38 @@ private extern class StdVectorBuffer
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<ID3D11ClassInstance*>')
-private extern class StdVectorClassInstance
+private extern class StdVectorClassInstanceImpl
 {
     @:native('std::vector<ID3D11ClassInstance*>')
-    static function create() : StdVectorClassInstance;
+    static function create(_count : Int) : StdVectorClassInstanceImpl;
 
     function data() : Star<Star<NativeID3D11ClassInstance>>;
 
-    function push_back(_item : Star<NativeID3D11ClassInstance>) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<Star<NativeID3D11ClassInstance>>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract ClassInstanceVector(StdVectorClassInstanceImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorClassInstanceImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : Star<NativeID3D11ClassInstance>
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : Star<NativeID3D11ClassInstance>) : Star<NativeID3D11ClassInstance>
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -530,16 +577,38 @@ private extern class StdVectorClassInstance
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<D3D11_VIEWPORT>')
-private extern class StdVectorViewport
+private extern class StdVectorViewportImpl
 {
     @:native('std::vector<D3D11_VIEWPORT>')
-    static function create() : StdVectorViewport;
+    static function create(_count : Int) : StdVectorViewportImpl;
 
     function data() : Star<NativeD3D11Viewport>;
 
-    function push_back(_item : NativeD3D11Viewport) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<NativeD3D11Viewport>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract ViewportVector(StdVectorViewportImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorViewportImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : NativeD3D11Viewport
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : NativeD3D11Viewport) : NativeD3D11Viewport
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -547,16 +616,38 @@ private extern class StdVectorViewport
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<D3D11_RECT>')
-private extern class StdVectorRect
+private extern class StdVectorRectImpl
 {
     @:native('std::vector<D3D11_RECT>')
-    static function create() : StdVectorRect;
+    static function create(_count : Int) : StdVectorRectImpl;
 
     function data() : Star<NativeD3D11Rect>;
 
-    function push_back(_item : NativeD3D11Rect) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<NativeD3D11Rect>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract RectVector(StdVectorRectImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorRectImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : NativeD3D11Rect
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : NativeD3D11Rect) : NativeD3D11Rect
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -564,16 +655,38 @@ private extern class StdVectorRect
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<ID3D11SamplerState*>')
-private extern class StdVectorSamplerState
+private extern class StdVectorSamplerStateImpl
 {
     @:native('std::vector<ID3D11SamplerState*>')
-    static function create() : StdVectorSamplerState;
+    static function create(_count : Int) : StdVectorSamplerStateImpl;
 
     function data() : Star<Star<NativeID3D11SamplerState>>;
 
-    function push_back(_item : Star<NativeID3D11SamplerState>) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<Star<NativeID3D11SamplerState>>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract SamplerStateVector(StdVectorSamplerStateImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorSamplerStateImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : Star<NativeID3D11SamplerState>
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : Star<NativeID3D11SamplerState>) : Star<NativeID3D11SamplerState>
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
 
 @:keep
@@ -581,14 +694,36 @@ private extern class StdVectorSamplerState
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<ID3D11ShaderResourceView*>')
-private extern class StdVectorShaderResourceView
+private extern class StdVectorShaderResourceViewImpl
 {
     @:native('std::vector<ID3D11ShaderResourceView*>')
-    static function create() : StdVectorShaderResourceView;
+    static function create(_count : Int) : StdVectorShaderResourceViewImpl;
 
     function data() : Star<Star<NativeID3D11ShaderResourceView>>;
 
-    function push_back(_item : Star<NativeID3D11ShaderResourceView>) : Void;
+    @:native('data')
+    private function ptr() : RawPointer<Star<NativeID3D11ShaderResourceView>>;
+}
 
-    function clear() : Void;
+@:forward()
+private abstract ShaderResourceViewVector(StdVectorShaderResourceViewImpl)
+{
+    public function new(_count : Int)
+    {
+        this = StdVectorShaderResourceViewImpl.create(_count);
+    }
+
+    @:arrayAccess
+    inline function arrayGet(_key : Int) : Star<NativeID3D11ShaderResourceView>
+    {
+        return @:privateAccess this.ptr()[_key];
+    }
+
+    @:arrayAccess
+    inline function arraySet(_key : Int, _value : Star<NativeID3D11ShaderResourceView>) : Star<NativeID3D11ShaderResourceView>
+    {
+        @:privateAccess this.ptr()[_key] = _value;
+
+        return _value;
+    }
 }
