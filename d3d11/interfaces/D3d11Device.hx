@@ -1,16 +1,16 @@
 package d3d11.interfaces;
 
+import cpp.Star;
+import cpp.ConstPointer;
+import com.GUID;
+import com.Unknown;
 import d3dcommon.interfaces.D3dBlob;
-import utils.StdVector;
 import d3d11.interfaces.D3d11DepthStencilState.NativeID3D11DepthStencilState;
 import d3d11.structures.D3d11DepthStencilDescription;
-import cpp.Pointer;
-import haxe.ds.Vector;
 import d3d11.interfaces.D3d11InputLayout;
 import d3d11.interfaces.D3d11VertexShader;
 import d3d11.interfaces.D3d11PixelShader;
 import d3d11.interfaces.D3d11ClassLinkage;
-import cpp.ConstPointer;
 import d3d11.interfaces.D3d11SamplerState;
 import d3d11.structures.D3d11SamplerDescription;
 import d3d11.interfaces.D3d11ShaderResourceView;
@@ -18,9 +18,6 @@ import d3d11.structures.D3d11ShaderResourceViewDescription;
 import d3d11.interfaces.D3d11RenderTargetView;
 import d3d11.structures.D3d11RenderTargetViewDescription;
 import d3d11.structures.D3d11InputElementDescription;
-import cpp.Star;
-import com.GUID;
-import com.Unknown;
 import d3d11.constants.D3d11Error;
 import d3d11.structures.D3d11RasterizerDescription;
 import d3d11.structures.D3d11BlendDescription;
@@ -48,7 +45,7 @@ class D3d11Device extends Unknown
     {
         super();
 
-        vectorInputLayout = StdVectorInputElementDescription.create(32);
+        vectorInputLayout = StdVectorInputElementDescription.create();
     }
 
     /**
@@ -201,12 +198,11 @@ class D3d11Device extends Unknown
     public function createInputLayout(_inputElementDescriptions : Array<D3d11InputElementDescription>, _blob : D3dBlob, _inputLayout : D3d11InputLayout) : D3d11Error
     {
         for (i in 0..._inputElementDescriptions.length)
-        {
-            //vectorInputLayout.set(i, _inputElementDescriptions[i].backing);
-            vectorInputLayout.raw()[i] = _inputElementDescriptions[i].backing;
-        }        
+        {           
+            vectorInputLayout.push_back(_inputElementDescriptions[i].backing);
+        }
 
-        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _blob.getBufferPointer().ptr, _blob.getBufferSize(), cast _inputLayout.addressOf());
+        return (cast ptr : Star<NativeID3D11Device>).createInputLayout(vectorInputLayout.data(), _inputElementDescriptions.length, _blob.getBufferPointer().ptr, _blob.getBufferSize(), cast _inputLayout.ptr.addressOf());
     }
 
     /**
@@ -275,8 +271,14 @@ extern class NativeID3D11Device extends NativeIUnknown
 @:structAccess
 @:include('d3d11.h')
 @:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
-private extern class StdVectorInputElementDescription extends StdVector<NativeD3D11InputElementDescription>
+private extern class StdVectorInputElementDescription
 {
     @:native('std::vector<D3D11_INPUT_ELEMENT_DESC>')
-    static function create(_capacity : Int) : StdVectorInputElementDescription;
+    static function create() : StdVectorInputElementDescription;
+
+    function data() : Star<NativeD3D11InputElementDescription>;
+
+    function push_back(_item : NativeD3D11InputElementDescription) : Void;
+
+    function clear() : Void;
 }
