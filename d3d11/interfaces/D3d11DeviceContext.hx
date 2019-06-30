@@ -145,7 +145,7 @@ class D3d11DeviceContext extends Unknown
                 vectorRenderTargetView[i] = cast _renderTargetViews[i].ptr;
             }
 
-            (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(_renderTargetViews.length, vectorRenderTargetView.data(), null);
+            (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(_renderTargetViews.length, vectorRenderTargetView.data(), _depthStencilView == null ? null : cast _depthStencilView.ptr);
         }
         else
         {
