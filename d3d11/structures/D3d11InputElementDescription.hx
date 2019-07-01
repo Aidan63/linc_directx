@@ -110,7 +110,7 @@ class D3d11InputElementDescription
     @:void
     static function finalize(_obj : D3d11InputElementDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

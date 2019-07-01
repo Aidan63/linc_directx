@@ -144,7 +144,7 @@ class D3d11RenderTargetBlendDescription
     @:void
     static function finalize(_obj : D3d11RenderTargetBlendDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

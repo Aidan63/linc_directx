@@ -142,7 +142,7 @@ class D3d11Texture2DDescription
     @:void
     static function finalize(_obj : D3d11Texture2DDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

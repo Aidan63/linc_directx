@@ -64,7 +64,7 @@ class DxgiSampleDescription
     @:void
     static function finalize(_obj : DxgiSampleDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(cast _obj.backing).destroy();
     }
 }
 

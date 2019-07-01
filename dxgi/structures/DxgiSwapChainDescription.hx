@@ -116,7 +116,7 @@ class DxgiSwapChainDescription
     @:void
     static function finalize(_obj : DxgiSwapChainDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(cast _obj.backing).destroy();
     }
 }
 

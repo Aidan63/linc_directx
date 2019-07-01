@@ -106,7 +106,7 @@ class DxgiModeDescription
     @:void
     static function finalize(_obj : DxgiModeDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

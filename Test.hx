@@ -127,7 +127,7 @@ class Test
         swapChainDescription.windowed          = true;
         swapChainDescription.outputWindow      = hwnd;
 
-        if (D3d11.createDevice(adapter, Unknown, null, None, null, D3d11.SdkVersion, device, null, context) != Ok)
+        if (D3d11.createDevice(adapter, Unknown, null, 0, null, D3d11.SdkVersion, device, null, context) != Ok)
         {
             throw 'failed to created device and context';
         }

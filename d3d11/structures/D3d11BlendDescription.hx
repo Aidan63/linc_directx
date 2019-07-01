@@ -58,7 +58,7 @@ class D3d11BlendDescription
     @:void
     static function finalize(_obj : D3d11BlendDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

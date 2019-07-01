@@ -48,7 +48,7 @@ class D3dShaderMacro
     @:void
     static function finalize(_obj : D3dShaderMacro)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

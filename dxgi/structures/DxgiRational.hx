@@ -53,7 +53,7 @@ class DxgiRational
     @:void
     static function finalize(_obj : DxgiRational)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

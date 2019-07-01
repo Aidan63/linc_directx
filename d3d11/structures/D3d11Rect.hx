@@ -65,7 +65,7 @@ class D3d11Rect
     @:void
     static function finalize(_obj : D3d11Rect)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

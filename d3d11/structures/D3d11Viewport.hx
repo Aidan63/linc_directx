@@ -85,7 +85,7 @@ class D3d11Viewport
     @:void
     static function finalize(_obj : D3d11Viewport)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

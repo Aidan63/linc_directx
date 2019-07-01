@@ -56,7 +56,7 @@ class D3d11Tex2DArrayDsv
     @:void
     static function finalize(_obj : D3d11Tex2DArrayDsv)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

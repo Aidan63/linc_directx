@@ -64,7 +64,7 @@ class D3d11MappedSubResource
     @:void
     static function finalise(_obj : D3d11MappedSubResource)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

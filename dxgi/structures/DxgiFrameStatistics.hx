@@ -40,7 +40,7 @@ class DxgiFrameStatistics
     @:void
     static function finalize(_obj : DxgiFrameStatistics)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

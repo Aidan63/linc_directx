@@ -87,7 +87,7 @@ class D3d11DepthStencilOpDescription
     @:void
     static function finalise(_obj : D3d11DepthStencilOpDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

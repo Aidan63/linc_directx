@@ -38,7 +38,7 @@ class D3d11Tex1DDsv
     @:void
     static function finalize(_obj : D3d11Tex1DDsv)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

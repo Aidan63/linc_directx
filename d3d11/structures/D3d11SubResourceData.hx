@@ -68,7 +68,7 @@ class D3d11SubResourceData
     @:void
     static function finalize(_obj : D3d11SubResourceData)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

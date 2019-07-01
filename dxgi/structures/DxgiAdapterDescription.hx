@@ -122,7 +122,7 @@ class DxgiAdapterDescription
     @:void
     static function finalize(_obj : DxgiAdapterDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 
@@ -290,7 +290,7 @@ class DxgiAdapterDescription1
     @:void
     static function finalize(_obj : DxgiAdapterDescription1)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

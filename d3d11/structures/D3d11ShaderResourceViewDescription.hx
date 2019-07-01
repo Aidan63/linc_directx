@@ -26,7 +26,7 @@ class D3d11ShaderResourceViewDescription
     @:void
     static function finalize(_obj : D3d11ShaderResourceViewDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 

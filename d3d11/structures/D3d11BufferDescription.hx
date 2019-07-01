@@ -98,7 +98,7 @@ class D3d11BufferDescription
     @:void
     static function finalize(_obj : D3d11BufferDescription)
     {
-        Pointer.fromRaw(cast _obj.backing).destroy();
+        Pointer.fromStar(_obj.backing).destroy();
     }
 }
 
