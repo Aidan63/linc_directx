@@ -40,6 +40,17 @@ class D3dCompiler
             _errors == null ? null : (cast _errors.ptr.addressOf() : Star<Star<NativeID3DBlob>>)
         );
     }
+
+    /**
+     * Creates a buffer.
+     * @param _size Number of bytes in the blob.
+     * @param _blob The address of a pointer to the `ID3DBlob` interface that is used to retrieve the buffer.
+     * @return Returns one of the Direct3D 11 return codes.
+     */
+    public static function createBlob(_size : Int, _blob : D3dBlob) : Int
+    {
+        return NativeD3DCompiler.createBlob(_size, (cast _blob.ptr.addressOf() : Star<Star<NativeID3DBlob>>));
+    }
 }
 
 @:keep
@@ -62,4 +73,7 @@ extern class NativeD3DCompiler
         _code : Star<Star<NativeID3DBlob>>,
         _errors : Star<Star<NativeID3DBlob>>
     ) : Int;
+
+    @:native('D3DCreateBlob')
+    static function createBlob(_size : SizeT, _blob : Star<Star<NativeID3DBlob>>) : Int;
 }
