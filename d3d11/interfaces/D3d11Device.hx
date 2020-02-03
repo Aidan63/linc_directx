@@ -1,8 +1,10 @@
 package d3d11.interfaces;
 
+import d3d11.enumerations.D3dFeatureLevel;
+import d3d11.interfaces.D3dDeviceContextState;
+import d3d11.enumerations.D3dFeatureLevel.NativeD3DFeatureLevel;
 import cpp.RawPointer;
 import cpp.Star;
-import cpp.ConstPointer;
 import com.GUID;
 import com.Unknown;
 import d3dcommon.interfaces.D3dBlob;
@@ -266,6 +268,78 @@ extern class NativeID3D11Device extends NativeIUnknown
     @:native('CreateDepthStencilState')
     function createDepthStencilState(_desciption : Star<NativeD3D11DepthStencilDescription>, _state : Star<Star<NativeID3D11DepthStencilState>>) : Int;
 }
+
+// #if (d3d11_feature_level >= 1.1)
+
+/**
+ * The device interface represents a virtual adapter; it is used to create resources.
+ * `ID3D11Device1` adds new methods to those in `ID3D11Device`.
+ */
+class D3d11Device1 extends D3d11Device
+{
+    /**
+     * Creates a context state object that holds all Microsoft Direct3D state and some Direct3D behavior.
+     * 
+     * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11device1-createdevicecontextstate
+     * 
+     * @param _flags A combination of `D3D11_1_CREATE_DEVICE_CONTEXT_STATE_FLAG` values that are combined by using a bitwise OR operation.
+     * The resulting value specifies how to create the context state object. The `D3D11_1_CREATE_DEVICE_CONTEXT_STATE_SINGLETHREADED` flag is currently the only defined flag.
+     * If the original device was created with `D3D11_CREATE_DEVICE_SINGLETHREADED`, you must create all context state objects from that device with the `D3D11_1_CREATE_DEVICE_CONTEXT_STATE_SINGLETHREADED` flag.
+     * 
+     * If you set the single-threaded flag for both the context state object and the device, you guarantee that you will call the whole set of context methods and device methods only from one thread.
+     * You therefore do not need to use critical sections to synchronize access to the device context, and the runtime can avoid working with those processor-intensive critical sections.
+     * @param _featureLevels An array of `D3dFeatureLevel` values. The array can contain elements from the following list and determines the order of feature levels for which creation is attempted.
+     * Unlike `D3d11CreateDevice`, you can't set _featureLevels to `null` because there is no default feature level array.
+     * @param _sdkVersion The SDK version. You must set this parameter to `D3D11_SDK_VERSION`.
+     * @param _emulatedInterface The globally unique identifier (GUID) for the emulated interface.
+     * This value specifies the behavior of the device when the context state object is active.
+     * Valid values are obtained by using the static `uuid` function on the `D3d11Device` and `D3d11Device1` classes.
+     * @param _choseFeatureLevel An array where the first entry receives a `D3dFeatureLevel` value from the `_featureLevels` array.
+     * This is the first array value with which `createDeviceContextState` succeeded in creating the context state object.
+     * If the call to `createDeviceContextState` fails, the first entry in `_chosenFeatureLevel` is set to zero.
+     * @param _contextState A `D3dDeviceContextState` object that represents the state of a Direct3D device.
+     * @return This method returns one of the Direct3D 11 Return Codes.
+     */
+    public function createDeviceContextState(
+        _flags : Int,
+        _featureLevels : Array<D3dFeatureLevel>,
+        _sdkVersion : Int,
+        _emulatedInterface : GUID,
+        _choseFeatureLevel : Null<Array<D3dFeatureLevel>>,
+        _contextState : Null<D3dDeviceContextState>) : D3d11Error
+    {
+        final features = cpp.Pointer.arrayElem(_featureLevels, 0).reinterpret();
+        final feature  = cpp.Pointer.arrayElem(_choseFeatureLevel, 0).reinterpret();
+        final contextPtr : Star<Star<NativeID3DDeviceContextState>> = _contextState == null ? null : cast _contextState.ptr.addressOf();
+
+        return (cast ptr : Star<NativeID3D11Device1>).createDeviceContextState(_flags, cast features.ptr, _featureLevels.length, _sdkVersion, _emulatedInterface, cast feature.ptr, contextPtr);
+    }
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:include('d3d11_1.h')
+@:native('ID3D11Device1')
+extern class NativeID3D11Device1 extends NativeID3D11Device
+{
+    static inline function uuid() : GUID
+    {
+        return untyped __cpp__('__uuidof(ID3D11Device1)');
+    }
+
+    @:native('CreateDeviceContextState')
+    function createDeviceContextState(
+        _flags : Int,
+        _featureLevels : Star<NativeD3DFeatureLevel>,
+        _featureLevel : Int,
+        _sdkVersion : Int,
+        _emulatedInterface : GUID,
+        _choseFeatureLevel : Star<NativeD3DFeatureLevel>,
+        _contextState : Star<Star<NativeID3DDeviceContextState>>) : Int;
+}
+
+// #end
 
 @:keep
 @:unreflective

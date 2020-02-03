@@ -455,6 +455,28 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
     function psSetShaderResources(_startSlot : cpp.UInt32, _numViews : cpp.UInt32, _shaderResourceViews : Star<Star<NativeID3D11ShaderResourceView>>) : Void;
 }
 
+// #if (d3d11_feature_level >= 1.1)
+
+class D3d11DeviceContext1 extends D3d11DeviceContext
+{
+    //
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:include('d3d11_1.h')
+@:native('ID3D11DeviceContext1')
+extern class NativeID3D11DeviceContext1 extends NativeID3D11DeviceContext
+{
+    static inline function uuid() : GUID
+    {
+        return untyped __cpp__('__uuidof(ID3D11DeviceContext1)');
+    }
+}
+
+// #end
+
 @:keep
 @:unreflective
 @:structAccess
