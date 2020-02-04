@@ -277,6 +277,10 @@ extern class NativeID3D11Device extends NativeIUnknown
  */
 class D3d11Device1 extends D3d11Device
 {
+    public static var uuid (get, never) : GUID;
+
+    inline static function get_uuid() return NativeID3D11Device1.uuid();
+
     /**
      * Creates a context state object that holds all Microsoft Direct3D state and some Direct3D behavior.
      * 

@@ -27,6 +27,8 @@ import d3d11.enumerations.D3d11Map;
 import d3d11.enumerations.D3d11PrimitiveTopology;
 import dxgi.enumerations.DxgiFormat;
 
+using cpp.Native;
+
 class D3d11DeviceContext extends Unknown
 {
     final clearColour : Array<Float32>;
@@ -459,7 +461,53 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
 
 class D3d11DeviceContext1 extends D3d11DeviceContext
 {
-    //
+    public static var uuid (get, never) : GUID;
+
+    inline static function get_uuid() return NativeID3D11DeviceContext1.uuid();
+
+    /**
+     * Sets the constant buffers that the pixel shader pipeline stage uses, and enables the shader to access other parts of the buffer.
+     * 
+     * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11devicecontext1-pssetconstantbuffers1
+     * @param _startSlot Index into the device's zero-based array to begin setting constant buffers to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffers Array of constant buffers being given to the device.
+     * @param _constants An array that holds the offsets into the buffers that `_buffers` specifies.
+     * Each offset specifies where, from the shader's point of view, each constant buffer starts.
+     * Each offset is measured in shader constants, which are 16 bytes (4*32-bit components).
+     * Therefore, an offset of 16 indicates that the start of the associated constant buffer is 256 bytes into the constant buffer.
+     * Each offset must be a multiple of 16 constants.
+     */
+    public function psSetConstantBuffers1(_startSlot : Int, _buffers : Array<D3d11Buffer>, _offsets : Array<Int>, _lengths : Array<Int>)
+    {
+        for (i in 0..._buffers.length)
+        {
+            vectorBuffer[i] = cast _buffers[i].ptr;
+        }
+
+        (cast ptr : Star<NativeID3D11DeviceContext1>).psSetConstantBuffers1(_startSlot, _buffers.length, vectorBuffer.data(), cast Pointer.arrayElem(_offsets, 0).ptr, cast Pointer.arrayElem(_lengths, 0).ptr);
+    }
+
+    /**
+     * Sets the constant buffers that the vertex shader pipeline stage uses.
+     * 
+     * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11devicecontext1-vssetconstantbuffers1
+     * @param _startSlot Index into the device's zero-based array to begin setting constant buffers to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffers Array of constant buffers being given to the device.
+     * @param _constants An array that holds the offsets into the buffers that `_buffers` specifies.
+     * Each offset specifies where, from the shader's point of view, each constant buffer starts.
+     * Each offset is measured in shader constants, which are 16 bytes (4*32-bit components).
+     * Therefore, an offset of 16 indicates that the start of the associated constant buffer is 256 bytes into the constant buffer.
+     * Each offset must be a multiple of 16 constants.
+     */
+    public function vsSetConstantBuffers1(_startSlot : Int, _buffers : Array<D3d11Buffer>, _offsets : Array<Int>, _lengths : Array<Int>)
+    {
+        for (i in 0..._buffers.length)
+        {
+            vectorBuffer[i] = cast _buffers[i].ptr;
+        }
+
+        (cast ptr : Star<NativeID3D11DeviceContext1>).vsSetConstantBuffers1(_startSlot, _buffers.length, vectorBuffer.data(), cast Pointer.arrayElem(_offsets, 0).ptr, cast Pointer.arrayElem(_lengths, 0).ptr);
+    }
 }
 
 @:keep
@@ -473,6 +521,12 @@ extern class NativeID3D11DeviceContext1 extends NativeID3D11DeviceContext
     {
         return untyped __cpp__('__uuidof(ID3D11DeviceContext1)');
     }
+
+    @:native('PSSetConstantBuffers1')
+    function psSetConstantBuffers1(_startSlot : cpp.UInt32, _numBuffers : cpp.UInt32, _constantBuffers : Star<Star<NativeID3D11Buffer>>, _firstConstants : Star<cpp.UInt32>, _numConstants : Star<cpp.UInt32>) : Void;
+
+    @:native('VSSetConstantBuffers1')
+    function vsSetConstantBuffers1(_startSlot : cpp.UInt32, _numBuffers : cpp.UInt32, _constantBuffers : Star<Star<NativeID3D11Buffer>>, _firstConstants : Star<cpp.UInt32>, _numConstants : Star<cpp.UInt32>) : Void;
 }
 
 // #end
