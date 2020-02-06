@@ -269,8 +269,6 @@ extern class NativeID3D11Device extends NativeIUnknown
     function createDepthStencilState(_desciption : Star<NativeD3D11DepthStencilDescription>, _state : Star<Star<NativeID3D11DepthStencilState>>) : Int;
 }
 
-// #if (d3d11_feature_level >= 1.1)
-
 /**
  * The device interface represents a virtual adapter; it is used to create resources.
  * `ID3D11Device1` adds new methods to those in `ID3D11Device`.
@@ -342,8 +340,6 @@ extern class NativeID3D11Device1 extends NativeID3D11Device
         _choseFeatureLevel : Star<NativeD3DFeatureLevel>,
         _contextState : Star<Star<NativeID3DDeviceContextState>>) : Int;
 }
-
-// #end
 
 @:keep
 @:unreflective

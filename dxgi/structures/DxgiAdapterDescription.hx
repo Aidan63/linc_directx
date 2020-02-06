@@ -164,8 +164,6 @@ extern class NativeDXGIAdapterDescription
     var sharedSystemMemory : cpp.SizeT;
 }
 
-#if (dxgi_feature_level >= 1.1)
-
 /**
  * Describes an adapter (or video card) using DXGI 1.1.
  */
@@ -334,5 +332,3 @@ extern class NativeDXGIAdapterDescription1
     @:native('Flags')
     var flags : cpp.UInt32;
 }
-
-#end

@@ -5,9 +5,11 @@ import cpp.Star;
 import com.HMODULE;
 import com.GUID;
 import com.Unknown;
+import dxgi.interfaces.DxgiOutput;
 import dxgi.interfaces.DxgiAdapter;
 import dxgi.interfaces.DxgiSwapChain;
 import dxgi.structures.DxgiSwapChainDescription;
+import dxgi.structures.DxgiSwapChainFullscreenDescription;
 import dxgi.constants.DxgiError;
 
 using cpp.Native;
@@ -81,8 +83,8 @@ class DxgiFactory extends DxgiObject
 @:keep
 @:unreflective
 @:structAccess
-@:native("IDXGIFactory")
 @:include("dxgi.h")
+@:native("IDXGIFactory")
 extern class NativeIDXGIFactory extends NativeIUnknown
 {
     inline static function uuid() : GUID
@@ -106,8 +108,6 @@ extern class NativeIDXGIFactory extends NativeIUnknown
     function makeWindowAssociation(_windowHandle : HWND, _flags : cpp.UInt32) : Int;
 }
 
-#if (dxgi_feature_level >= 1.1)
-
 /**
  * The IDXGIFactory1 interface implements methods for generating DXGI objects.
  */
@@ -119,8 +119,8 @@ class DxgiFactory1 extends DxgiFactory
 @:keep
 @:unreflective
 @:structAccess
-@:native("IDXGIFactory1")
 @:include("dxgi.h")
+@:native("IDXGIFactory1")
 extern class NativeIDXGIFactory1 extends NativeIDXGIFactory
 {
     inline static function uuid() : GUID
@@ -129,4 +129,57 @@ extern class NativeIDXGIFactory1 extends NativeIDXGIFactory
     }
 }
 
-#end
+/**
+ * The `DxgiFactory2` interface includes methods to create a newer version swap chain with more features than `DxgiSwapChain` and to monitor stereoscopic 3D capabilities.
+ */
+class DxgiFactory2 extends DxgiFactory1
+{
+    public static var uuid (get, never) : GUID;
+
+    inline static function get_uuid() : GUID return NativeIDXGIFactory2.uuid();
+
+    /**
+     * Creates a swap chain that is associated with an HWND handle to the output window for the swap chain.
+     * @param _device For Direct3D 11, and earlier versions of Direct3D, this is a pointer to the Direct3D device for the swap chain.
+     * For Direct3D 12 this is a pointer to a direct command queue (refer to `D3d12CommandQueue`).
+     * @param _hwnd The HWND handle that is associated with the swap chain that `createSwapChainForHwnd` creates.
+     * @param _description A pointer to a `DxgiSwapChainDescription1` structure for the swap-chain description.
+     * @param _fullscreen A pointer to a `DxgiSwapChainFullscreenDescription` structure for the description of a full-screen swap chain.
+     * You can optionally set this parameter to create a full-screen swap chain.
+     * Set it to `NULL` to create a windowed swap chain.
+     * @param _restrictToOutput A pointer to the `DxgiOutput` interface for the output to restrict content to.
+     * You must also pass the `DxgiPresent.RestrictToOutput` flag in a `DxgiSwapChain1.Present1` call to force the content to appear blacked out on any other output.
+     * If you want to restrict the content to a different output, you must create a new swap chain.
+     * However, you can conditionally restrict content based on the `DxgiPresent.RestrictToOutput` flag.
+     * 
+     * Set this parameter to NULL if you don't want to restrict content to an output target.
+     * @param _swapChain A pointer to a variable that receives a pointer to the `DxgiSwapChain1` interface for the swap chain that `createSwapChainForHwnd` creates.
+     * @return DxgiError
+     */
+    public function createSwapChainForHwnd(_device : Unknown, _hwnd : HWND, _description : DxgiSwapChainDescription1, _fullscreen : Null<DxgiSwapChainFullscreenDescription>, _restrictToOutput : Null<DxgiOutput>, _swapChain : DxgiSwapChain1) : DxgiError
+    {
+        return (cast ptr : Star<NativeIDXGIFactory2>).createSwapChainForHwnd(_device.ptr, _hwnd, _description.backing, _fullscreen == null ? null : _fullscreen.backing, _restrictToOutput == null ? null : cast _restrictToOutput.ptr, cast _swapChain.ptr.addressOf());
+    }
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:include('dxgi1_2.h')
+@:native('IDXGIFactory2')
+extern class NativeIDXGIFactory2 extends NativeIDXGIFactory1
+{
+    inline static function uuid() : GUID
+    {
+        return untyped __cpp__('__uuidof(IDXGIFactory2)');
+    }
+
+    @:native('CreateSwapChainForHwnd')
+    function createSwapChainForHwnd(
+        _device : Star<NativeIUnknown>,
+        _hwnd : HWND,
+        _description : Star<NativeDXGISwapChainDescription1>,
+        _fullscreenDescription : Star<NativeDXGISwapChainFullscreenDescription>,
+        _output : Star<NativeIDXGIOutput>,
+        _swapchain : Star<Star<NativeIDXGISwapChain1>>) : Int;
+}

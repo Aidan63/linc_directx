@@ -69,8 +69,6 @@ extern class NativeIDXGIAdapter extends NativeIDXGIObject
     function enumOutputs(_output : cpp.UInt32, _ptr : Star<Star<NativeIDXGIOutput>>) : Int;
 }
 
-#if (dxgi_feature_level >= 1.1)
-
 /**
  * The `IDXGIAdapter1` interface represents a display sub-system (including one or more GPU's, DACs and video memory).
  */
@@ -99,5 +97,3 @@ extern class NativeIDXGIAdapter1 extends NativeIDXGIAdapter
     @:native('GetDesc1')
     function getDesc1(_desc : Star<NativeDXGIAdapterDescription1>) : Int;
 }
-
-#end

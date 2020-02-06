@@ -457,8 +457,6 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
     function psSetShaderResources(_startSlot : cpp.UInt32, _numViews : cpp.UInt32, _shaderResourceViews : Star<Star<NativeID3D11ShaderResourceView>>) : Void;
 }
 
-// #if (d3d11_feature_level >= 1.1)
-
 class D3d11DeviceContext1 extends D3d11DeviceContext
 {
     public static var uuid (get, never) : GUID;
@@ -528,8 +526,6 @@ extern class NativeID3D11DeviceContext1 extends NativeID3D11DeviceContext
     @:native('VSSetConstantBuffers1')
     function vsSetConstantBuffers1(_startSlot : cpp.UInt32, _numBuffers : cpp.UInt32, _constantBuffers : Star<Star<NativeID3D11Buffer>>, _firstConstants : Star<cpp.UInt32>, _numConstants : Star<cpp.UInt32>) : Void;
 }
-
-// #end
 
 @:keep
 @:unreflective

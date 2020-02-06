@@ -11,6 +11,7 @@ import dxgi.interfaces.DxgiOutput;
 import dxgi.structures.DxgiSwapChainDescription;
 import dxgi.structures.DxgiModeDescription;
 import dxgi.structures.DxgiFrameStatistics;
+import dxgi.structures.DxgiPresentParameters;
 import dxgi.enumerations.DxgiSwapEffect;
 import dxgi.enumerations.DxgiFormat;
 import dxgi.enumerations.DxgiSwapChainFlag;
@@ -220,4 +221,52 @@ extern class NativeIDXGISwapChain extends NativeIDXGIObject
 
     @:native('SetFullscreenState')
     function setFullscreenState(_fullscreen : cpp.Int32, _target : Star<NativeIDXGIOutput>) : Int;
+}
+
+/**
+ * Provides presentation capabilities that are enhanced from `DxgiSwapChain`.
+ * These presentation capabilities consist of specifying dirty rectangles and scroll rectangle to optimize the presentation.
+ */
+class DxgiSwapChain1 extends DxgiSwapChain
+{
+    /**
+     * Presents a frame on the display screen.
+     * @param _syncInterval An integer that specifies how to synchronize presentation of a frame with the vertical blank.
+     * 
+     * For the bit-block transfer (bitblt) model (`DxgiSwapEffect.Discard` or `DxgiSwapEffect.Sequential`), values are:
+     * - 0 - The presentation occurs immediately, there is no synchronization.
+     * - 1 through 4 - Synchronize presentation after the nth vertical blank.
+     * 
+     * For the flip model (`DxgiSwapEffect.Sequential`), values are:
+     * - 0 - Cancel the remaining time on the previously presented frame and discard this frame if a newer frame is queued.
+     * - 1 through 4 - Synchronize presentation for at least n vertical blanks.
+     * 
+     * For an example that shows how sync-interval values affect a flip presentation queue, see Remarks.
+     * 
+     * If the update region straddles more than one output (each represented by `DxgiOutput1`), Present1 performs the synchronization to the output that contains the largest sub-rectangle of the target window's client area.
+     * @param _presentFlags An integer value that contains swap-chain presentation options.
+     * These options are defined by the `DxgiPresent` constants.
+     * @param _presentParameters A pointer to a `DxgiPresentParameters` structure that describes updated rectangles and scroll information of the frame to present.
+     * @return Possible return values include: `OK`, `DeviceRemoved`, `Occluded`, `InvalidCall`, or `OutOfMemory`.
+     */
+    public function present1(_syncInterval : Int, _presentFlags : Int, _presentParameters : DxgiPresentParameters) : DxgiError
+    {
+        return (cast ptr : Star<NativeIDXGISwapChain1>).present1(_syncInterval, _presentFlags, _presentParameters.backing);
+    }
+}
+
+@:keep
+@:unreflective
+@:structAccess
+@:include("dxgi1_2.h")
+@:native("IDXGISwapChain1")
+extern class NativeIDXGISwapChain1 extends NativeIDXGISwapChain
+{
+    inline static function uuid() : GUID
+    {
+        return untyped __cpp__('__uuidof(IDXGISwapChain1)');
+    }
+
+    @:native('Present1')
+    function present1(_syncInterval : cpp.UInt32, _presentFlags : cpp.UInt32, _presentParameters : Star<NativeDXGIPresentParameters>) : Int;
 }
