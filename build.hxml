@@ -1,10 +1,12 @@
--cpp out
+--cpp out
 
--lib safety
--lib linc_sdl
+-L safety
+-L linc_sdl
+-L hxcpp_extern_helpers
 
 -D dxgi_feature_level=1.1
+-D analyzer-optimize
 
--cp ./
+-p ./
 
--main Test
+-m Test

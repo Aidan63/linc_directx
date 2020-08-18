@@ -1,9 +1,9 @@
 package d3dcompiler;
 
-import cpp.Pointer;
-import cpp.ConstCharStar;
-import cpp.SizeT;
 import cpp.Star;
+import cpp.SizeT;
+import cpp.Pointer;
+import cpp.utils.VarConstCharStar;
 import haxe.io.BytesData;
 import d3dcommon.structures.D3dShaderMacro;
 import d3dcommon.interfaces.D3dInclude;
@@ -63,11 +63,11 @@ extern class NativeD3DCompiler
     static function compile(
         _sourceData : Star<cpp.Void>,
         _sourceDataSize : SizeT,
-        _sourceName : ConstCharStar,
+        _sourceName : VarConstCharStar,
         _defines : Star<NativeD3DShaderMacro>,
         _include : Star<NativeID3DInclude>,
-        _entryPoint : ConstCharStar,
-        _target : ConstCharStar,
+        _entryPoint : VarConstCharStar,
+        _target : VarConstCharStar,
         _flags1 : cpp.UInt32,
         _flags2 : cpp.UInt32,
         _code : Star<Star<NativeID3DBlob>>,
