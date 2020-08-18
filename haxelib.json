@@ -1,0 +1,11 @@
+{
+    "name": "linc_directx",
+    "contributors": [ "Aidan" ],
+    "license": "MIT",
+    "description": "Hxcpp binding for DXGI, D3D11, and D3DCompiler",
+    "releasenote": "Initial release",
+    "version": "1.0.0",
+    "dependencies": {
+        "hxcpp_extern_helpers" : "gh:aidan63/hxcpp_extern_helpers#d1101dc"
+    }
+}

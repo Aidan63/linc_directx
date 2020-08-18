@@ -1,6 +1,5 @@
 --cpp out
 
--L safety
 -L linc_sdl
 -L hxcpp_extern_helpers
 
