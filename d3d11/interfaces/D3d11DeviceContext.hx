@@ -1,5 +1,6 @@
 package d3d11.interfaces;
 
+import cpp.utils.VarPointer;
 import cpp.RawPointer;
 import cpp.Pointer;
 import cpp.Star;
@@ -138,7 +139,7 @@ class D3d11DeviceContext extends Unknown
      * @param _renderTargetViews Pointer to an array of `ID3D11RenderTargetView` that represent the render targets to bind to the device. If this parameter is NULL and NumViews is 0, no render targets are bound.
      * @param _depthStencilView Pointer to a `ID3D11DepthStencilView` that represents the depth-stencil view to bind to the device. If this parameter is NULL, the depth-stencil state is not bound.
      */
-    public function omSetRenderTargets(_renderTargetViews : Array<D3d11RenderTargetView>, _depthStencilView : Null<D3d11DepthStencilView>)
+    public function omSetRenderTargets(_renderTargetViews : Null<Array<D3d11RenderTargetView>>, _depthStencilView : Null<D3d11DepthStencilView>)
     {
         if (_renderTargetViews != null)
         {
@@ -151,7 +152,28 @@ class D3d11DeviceContext extends Unknown
         }
         else
         {
-            var nullptr : Star<NativeID3D11RenderTargetView> = null;
+            final nullptr : Star<NativeID3D11RenderTargetView> = null;
+
+            (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(0, cpp.Native.addressOf(nullptr), _depthStencilView == null ? null : cast _depthStencilView.ptr);
+        }
+    }
+
+    /**
+     * Bind a render target atomically and the depth-stencil buffer to the output-merger stage.
+     * @param _renderTargetViews Pointer to a `ID3D11RenderTargetView` that represent the render targets to bind to the device. If this parameter is NULL and NumViews is 0, no render targets are bound.
+     * @param _depthStencilView Pointer to a `ID3D11DepthStencilView` that represents the depth-stencil view to bind to the device. If this parameter is NULL, the depth-stencil state is not bound.
+     */
+    public function omSetRenderTarget(_renderTargetView : Null<D3d11RenderTargetView>, _depthStencilView : Null<D3d11DepthStencilView>)
+    {
+        if (_renderTargetView != null)
+        {
+            vectorRenderTargetView[0] = cast _renderTargetView.ptr;
+
+            (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(1, vectorRenderTargetView.data(), _depthStencilView == null ? null : cast _depthStencilView.ptr);
+        }
+        else
+        {
+            final nullptr : Star<NativeID3D11RenderTargetView> = null;
 
             (cast ptr : Star<NativeID3D11DeviceContext>).omSetRenderTargets(0, cpp.Native.addressOf(nullptr), _depthStencilView == null ? null : cast _depthStencilView.ptr);
         }
@@ -231,6 +253,22 @@ class D3d11DeviceContext extends Unknown
     }
 
     /**
+     * Bind a vertex buffer to the input-assembler stage.
+     * @param _startSlot The first input slot for binding.
+     * The first vertex buffer is explicitly bound to the start slot; this causes each additional vertex buffer in the array to be implicitly bound to each subsequent input slot.
+     * The maximum of 16 or 32 input slots (ranges from 0 to `D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT` - 1) are available; the maximum number of input slots depends on the feature level.
+     * @param _buffers A pointer to an array of vertex buffers (see `ID3D11Buffer`). The vertex buffers must have been created with the `D3D11_BIND_VERTEX_BUFFER` flag.
+     * @param _strides Pointer to an array of stride values; one stride value for each buffer in the vertex-buffer array. Each stride is the size (in bytes) of the elements that are to be used from that vertex buffer.
+     * @param _offsets Pointer to an array of offset values; one offset value for each buffer in the vertex-buffer array. Each offset is the number of bytes between the first element of a vertex buffer and the first element that will be used.
+     */
+    public function iaSetVertexBuffer(_slot : Int, _buffer : D3d11Buffer, _stride : Int, _offset : Int)
+    {
+        vectorBuffer[0] = cast _buffer.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).iaSetVertexBuffers(_slot, 1, vectorBuffer.data(), cast VarPointer.addressOf(_stride).ptr, cast VarPointer.addressOf(_offset).ptr);
+    }
+
+    /**
      * Bind an array of viewports to the rasterizer stage of the pipeline.
      * @param _viewports An array of `D3D11_VIEWPORT` structures to bind to the device. See the structure page for details about how the viewport size is dependent on the device feature level which has changed between Direct3D 11 and Direct3D 10.
      */
@@ -245,6 +283,17 @@ class D3d11DeviceContext extends Unknown
     }
 
     /**
+     * Bind a viewport to the rasterizer stage of the pipeline.
+     * @param _viewports `D3D11_VIEWPORT` structure to bind to the device. See the structure page for details about how the viewport size is dependent on the device feature level which has changed between Direct3D 11 and Direct3D 10.
+     */
+    public function rsSetViewport(_viewport : D3d11Viewport)
+    {
+        vectorViewport[0] = _viewport.backing;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).rsSetViewports(1, vectorViewport.data());
+    }
+
+    /**
      * Bind an array of scissor rectangles to the rasterizer stage.
      * @param _rects An array of scissor rectangles (see `D3D11_RECT`).
      */
@@ -256,6 +305,17 @@ class D3d11DeviceContext extends Unknown
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).rsSetScissorRects(_rects.length, vectorRect.data());
+    }
+
+    /**
+     * Bind a scissor rectangle to the rasterizer stage.
+     * @param _rects Scissor rectangles (see `D3D11_RECT`).
+     */
+    public function rsSetScissorRect(_rect : D3d11Rect)
+    {
+        vectorRect[0] = _rect.backing;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).rsSetScissorRects(1, vectorRect.data());
     }
 
     /**
@@ -486,6 +546,25 @@ class D3d11DeviceContext1 extends D3d11DeviceContext
     }
 
     /**
+     * Sets a constant buffer that the pixel shader pipeline stage uses, and enables the shader to access other parts of the buffer.
+     * 
+     * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11devicecontext1-pssetconstantbuffers1
+     * @param _startSlot Index into the device's zero-based array to begin setting constant buffers to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffers Array of constant buffers being given to the device.
+     * @param _constants An array that holds the offsets into the buffers that `_buffers` specifies.
+     * Each offset specifies where, from the shader's point of view, each constant buffer starts.
+     * Each offset is measured in shader constants, which are 16 bytes (4*32-bit components).
+     * Therefore, an offset of 16 indicates that the start of the associated constant buffer is 256 bytes into the constant buffer.
+     * Each offset must be a multiple of 16 constants.
+     */
+    public function psSetConstantBuffer1(_slot : Int, _buffer : D3d11Buffer, _offset : Int, _length : Int)
+    {
+        vectorBuffer[0] = cast _buffer.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext1>).psSetConstantBuffers1(_slot, 1, vectorBuffer.data(), cast VarPointer.addressOf(_offset).ptr, cast VarPointer.addressOf(_length).ptr);
+    }
+
+    /**
      * Sets the constant buffers that the vertex shader pipeline stage uses.
      * 
      * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11devicecontext1-vssetconstantbuffers1
@@ -505,6 +584,25 @@ class D3d11DeviceContext1 extends D3d11DeviceContext
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext1>).vsSetConstantBuffers1(_startSlot, _buffers.length, vectorBuffer.data(), cast Pointer.arrayElem(_offsets, 0).ptr, cast Pointer.arrayElem(_lengths, 0).ptr);
+    }
+
+    /**
+     * Sets a constant buffer that the vertex shader pipeline stage uses.
+     * 
+     * https://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11devicecontext1-vssetconstantbuffers1
+     * @param _startSlot Index into the device's zero-based array to begin setting constant buffers to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffers Array of constant buffers being given to the device.
+     * @param _constants An array that holds the offsets into the buffers that `_buffers` specifies.
+     * Each offset specifies where, from the shader's point of view, each constant buffer starts.
+     * Each offset is measured in shader constants, which are 16 bytes (4*32-bit components).
+     * Therefore, an offset of 16 indicates that the start of the associated constant buffer is 256 bytes into the constant buffer.
+     * Each offset must be a multiple of 16 constants.
+     */
+    public function vsSetConstantBuffer1(_slot : Int, _buffer : D3d11Buffer, _offset : Int, _length : Int)
+    {
+        vectorBuffer[0] = cast _buffer.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext1>).vsSetConstantBuffers1(_slot, 1, vectorBuffer.data(), cast VarPointer.addressOf(_offset).ptr, cast VarPointer.addressOf(_length).ptr);
     }
 }
 
