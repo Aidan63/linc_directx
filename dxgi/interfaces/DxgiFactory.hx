@@ -108,8 +108,10 @@ extern class NativeIDXGIFactory1 extends NativeIDXGIFactory
         return untyped __cpp__('__uuidof(IDXGIFactory1)');
     }
 
+    @:native('IsCurrent')
     function isCurrent() : Bool;
 
+    @:native('EnumAdapters1')
     public function enumAdapters1(_adapter : Int, _ppAdapter : cpp.Star<cpp.Star<NativeIDXGIAdapter1>>) : Int;
 }
 
