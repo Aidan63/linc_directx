@@ -9,9 +9,7 @@ using cpp.Native;
 
 class DxgiObject extends Unknown
 {
-    public static final uuid = NativeIDXGIObject.uuid();
-
-    public function getParent(_guid : GUID, _parent : Unknown) : DxgiError
+    public function getParent(_guid : cpp.Struct<GUID>, _parent : Unknown) : DxgiError
     {
         return (cast ptr : Star<NativeIDXGIObject>).getParent(_guid, cast _parent.addressOf());
     }
@@ -24,11 +22,6 @@ class DxgiObject extends Unknown
 @:include("dxgi.h")
 extern class NativeIDXGIObject extends NativeIUnknown
 {
-    inline static function uuid() : GUID
-    {
-        return untyped __cpp__('__uuidof(IDXGIObject)');
-    }
-
     @:native('GetParent')
     function getParent(_guid : GUID, _parent : Star<Star<cpp.Void>>) : Int;
 }

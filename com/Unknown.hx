@@ -52,7 +52,7 @@ class Unknown
      * @param _object TBD
      * @return This method returns `S_OK` if the interface is supported, and `E_NOINTERFACE` otherwise. If ppvObject is NULL, this method returns `E_POINTER`.
      */
-    public function queryInterface(_riid : GUID, _object : Unknown) : Int
+    public function queryInterface(_riid : cpp.Struct<GUID>, _object : Unknown) : Int
     {
         return ptr.queryInterface(_riid, cast _object.ptr.addressOf());
     }
@@ -77,11 +77,6 @@ class Unknown
 @:include("unknwn.h")
 extern class NativeIUnknown
 {
-    inline static function uuid() : GUID
-    {
-        return untyped __cpp__('__uuidof(IUnknown)');
-    }
-
     @:native('Release')
     function release() : cpp.UInt64;
 

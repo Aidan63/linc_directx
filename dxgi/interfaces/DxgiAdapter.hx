@@ -1,7 +1,6 @@
 package dxgi.interfaces;
 
 import cpp.Star;
-import com.GUID;
 import dxgi.interfaces.DxgiObject;
 import dxgi.interfaces.DxgiOutput;
 import dxgi.constants.DxgiError;
@@ -57,11 +56,6 @@ class DxgiAdapter extends DxgiObject
 @:include("dxgi.h")
 extern class NativeIDXGIAdapter extends NativeIDXGIObject
 {
-    inline static function uuid() : GUID
-    {
-        return untyped __cpp__('__uuidof(IDXGIAdapter)');
-    }
-
     @:native('GetDesc')
     function getDesc(_desc : Star<NativeDXGIAdapterDescription>) : Int;
 

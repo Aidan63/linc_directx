@@ -519,10 +519,8 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
 
 class D3d11DeviceContext1 extends D3d11DeviceContext
 {
-    public static var uuid (get, never) : GUID;
-
-    inline static function get_uuid() return NativeID3D11DeviceContext1.uuid();
-
+    public static final uuid : cpp.Struct<GUID> = NativeID3D11DeviceContext1.uuid();
+    
     /**
      * Sets the constant buffers that the pixel shader pipeline stage uses, and enables the shader to access other parts of the buffer.
      * 

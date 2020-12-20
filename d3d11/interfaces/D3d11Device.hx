@@ -275,9 +275,7 @@ extern class NativeID3D11Device extends NativeIUnknown
  */
 class D3d11Device1 extends D3d11Device
 {
-    public static var uuid (get, never) : GUID;
-
-    inline static function get_uuid() return NativeID3D11Device1.uuid();
+    public static final uuid : cpp.Struct<GUID> = NativeID3D11Device1.uuid();
 
     /**
      * Creates a context state object that holds all Microsoft Direct3D state and some Direct3D behavior.
@@ -306,7 +304,7 @@ class D3d11Device1 extends D3d11Device
         _flags : Int,
         _featureLevels : Array<D3dFeatureLevel>,
         _sdkVersion : Int,
-        _emulatedInterface : GUID,
+        _emulatedInterface : cpp.Struct<GUID>,
         _choseFeatureLevel : Null<Array<D3dFeatureLevel>>,
         _contextState : Null<D3dDeviceContextState>) : D3d11Error
     {

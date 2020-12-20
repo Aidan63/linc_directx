@@ -54,11 +54,11 @@ class DxgiSwapChainDescription
     /**
      * An HWND handle to the output window. This member must not be NULL.
      */
-    public var outputWindow (get, set) : HWND;
+    public var outputWindow (get, set) : cpp.Struct<HWND>;
 
-    inline function get_outputWindow() : HWND return backing.outputWindow;
+    inline function get_outputWindow() : cpp.Struct<HWND> return backing.outputWindow;
 
-    inline function set_outputWindow(_v : HWND) : HWND return backing.outputWindow = _v;
+    inline function set_outputWindow(_v : cpp.Struct<HWND>) : cpp.Struct<HWND> return backing.outputWindow = _v;
 
     /**
      * A Boolean value that specifies whether the output is in windowed mode. TRUE if the output is in windowed mode; otherwise, FALSE.

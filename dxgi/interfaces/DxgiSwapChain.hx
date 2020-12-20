@@ -33,7 +33,7 @@ class DxgiSwapChain extends DxgiObject
      * @param _surface A pointer to a back-buffer interface.
      * @return DxgiError
      */
-    public function getBuffer(_buffer : Int, _riid : GUID, _surface : Unknown) : DxgiError
+    public function getBuffer(_buffer : Int, _riid : cpp.Struct<GUID>, _surface : Unknown) : DxgiError
     {
         return (cast ptr : Star<NativeIDXGISwapChain>).getBuffer(_buffer, _riid, cast _surface.ptr.addressOf());
     }
@@ -187,11 +187,6 @@ class DxgiSwapChain extends DxgiObject
 @:include("dxgi.h")
 extern class NativeIDXGISwapChain extends NativeIDXGIObject
 {
-    inline static function uuid() : GUID
-    {
-        return untyped __cpp__('__uuidof(IDXGISwapChain)');
-    }
-
     @:native('GetBuffer')
     function getBuffer(_buffer : cpp.UInt32, _riid : GUID, _surface : Star<Star<cpp.Void>>) : Int;
 
@@ -262,11 +257,6 @@ class DxgiSwapChain1 extends DxgiSwapChain
 @:native("IDXGISwapChain1")
 extern class NativeIDXGISwapChain1 extends NativeIDXGISwapChain
 {
-    inline static function uuid() : GUID
-    {
-        return untyped __cpp__('__uuidof(IDXGISwapChain1)');
-    }
-
     @:native('Present1')
     function present1(_syncInterval : cpp.UInt32, _presentFlags : cpp.UInt32, _presentParameters : Star<NativeDXGIPresentParameters>) : Int;
 }

@@ -28,7 +28,7 @@ class Dxgi
      */
     static public function createFactory1(_factory : DxgiFactory1) : DxgiError
     {
-        return NativeDXGI.createFactory1(NativeIDXGIFactory1.uuid(), cast _factory.ptr.addressOf());
+        return NativeDXGI.createFactory1(DxgiFactory1.uuid, cast _factory.ptr.addressOf());
     }
 
     /**

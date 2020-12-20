@@ -47,7 +47,7 @@ class D3d11
     public static function createDevice(
         _adapter : Null<DxgiAdapter>,
         _driverType : D3dDriverType,
-        _software : Null<HMODULE>,
+        _software : Null<cpp.Struct<HMODULE>>,
         _flags : Int,
         _featureLevels : Null<Array<D3dFeatureLevel>>,
         _sdkVersion : Int,

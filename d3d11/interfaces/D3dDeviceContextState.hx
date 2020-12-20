@@ -11,7 +11,7 @@ class D3dDeviceContextState extends Unknown
 @:unreflective
 @:structAccess
 @:include('d3d11_1.h')
-@:native('ID3DDeviceContextState ')
+@:native('ID3DDeviceContextState')
 extern class NativeID3DDeviceContextState
 {
     //

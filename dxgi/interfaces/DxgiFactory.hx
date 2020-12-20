@@ -25,7 +25,7 @@ class DxgiFactory extends DxgiObject
      * @param _adapter Address of a pointer to an adapter (see `IDXGIAdapter`).
      * @return DxgiError
      */
-    public function createSoftwareAdapter(_module : HMODULE, _adapter : DxgiAdapter) : DxgiError
+    public function createSoftwareAdapter(_module : cpp.Struct<HMODULE>, _adapter : DxgiAdapter) : DxgiError
     {
         return (cast ptr : Star<NativeIDXGIFactory>).createSoftwareAdapter(_module, cast _adapter.ptr.addressOf());
     }
@@ -54,30 +54,6 @@ class DxgiFactory extends DxgiObject
     {
         return (cast ptr : Star<NativeIDXGIFactory>).enumAdapters(_index, cast _adapter.ptr.addressOf());
     }
-
-    /**
-     * Get the window through which the user controls the transition to and from full screen.
-     * @param _windowHandle A pointer to a window handle.
-     * @return Returns a code that indicates success or failure. `S_OK` indicates success, `DXGI_ERROR_INVALID_CALL` indicates pWindowHandle was passed in as NULL.
-     */
-    public function getWindowAssociation(_windowHandle : HWND) : DxgiError
-    {
-        return (cast ptr : Star<NativeIDXGIFactory>).getWindowAssociation(_windowHandle.addressOf());
-    }
-
-    /**
-     * Allows DXGI to monitor an application's message queue for the alt-enter key sequence (which causes the application to switch from windowed to full screen or vice versa).
-     * @param _windowHandle The handle of the window that is to be monitored. This parameter can be NULL; but only if the flags are also 0.
-     * @param _flags One or more of the following values:
-     * - `DXGI_MWA_NO_WINDOW_CHANGES` - Prevent DXGI from monitoring an applications message queue; this makes DXGI unable to respond to mode changes.
-     * - `DXGI_MWA_NO_ALT_ENTER` - Prevent DXGI from responding to an alt-enter sequence.
-     * - `DXGI_MWA_NO_PRINT_SCREEN` - Prevent DXGI from responding to a print-screen key.
-     * @return `DXGI_ERROR_INVALID_CALL` if WindowHandle is invalid, or `E_OUTOFMEMORY`.
-     */
-    public function makeWindowAssociation(_windowHandle : HWND, _flags : Int) : DxgiError
-    {
-        return (cast ptr : Star<NativeIDXGIFactory>).makeWindowAssociation(_windowHandle, _flags);
-    }
 }
 
 @:keep
@@ -100,12 +76,6 @@ extern class NativeIDXGIFactory extends NativeIUnknown
 
     @:native('CreateSwapChain')
     function createSwapChain(_device : Star<NativeIUnknown>, _description : Star<NativeDXGISwapChainDescription>, _swapchain : Star<Star<NativeIDXGISwapChain>>) : Int;
-
-    @:native('GetWindowAssociation')
-    function getWindowAssociation(_windowHandle : Star<HWND>) : Int;
-
-    @:native('MakeWindowAssociation')
-    function makeWindowAssociation(_windowHandle : HWND, _flags : cpp.UInt32) : Int;
 }
 
 /**
@@ -113,7 +83,7 @@ extern class NativeIDXGIFactory extends NativeIUnknown
  */
 class DxgiFactory1 extends DxgiFactory
 {
-    //
+    public static final uuid : cpp.Struct<GUID> = NativeIDXGIFactory1.uuid();
 }
 
 @:keep
@@ -134,9 +104,7 @@ extern class NativeIDXGIFactory1 extends NativeIDXGIFactory
  */
 class DxgiFactory2 extends DxgiFactory1
 {
-    public static var uuid (get, never) : GUID;
-
-    inline static function get_uuid() : GUID return NativeIDXGIFactory2.uuid();
+    public static final uuid : cpp.Struct<GUID> = NativeIDXGIFactory2.uuid();
 
     /**
      * Creates a swap chain that is associated with an HWND handle to the output window for the swap chain.
@@ -156,7 +124,7 @@ class DxgiFactory2 extends DxgiFactory1
      * @param _swapChain A pointer to a variable that receives a pointer to the `DxgiSwapChain1` interface for the swap chain that `createSwapChainForHwnd` creates.
      * @return DxgiError
      */
-    public function createSwapChainForHwnd(_device : Unknown, _hwnd : HWND, _description : DxgiSwapChainDescription1, _fullscreen : Null<DxgiSwapChainFullscreenDescription>, _restrictToOutput : Null<DxgiOutput>, _swapChain : DxgiSwapChain1) : DxgiError
+    public function createSwapChainForHwnd(_device : Unknown, _hwnd : cpp.Struct<HWND>, _description : DxgiSwapChainDescription1, _fullscreen : Null<DxgiSwapChainFullscreenDescription>, _restrictToOutput : Null<DxgiOutput>, _swapChain : DxgiSwapChain1) : DxgiError
     {
         return (cast ptr : Star<NativeIDXGIFactory2>).createSwapChainForHwnd(_device.ptr, _hwnd, _description.backing, _fullscreen == null ? null : _fullscreen.backing, _restrictToOutput == null ? null : cast _restrictToOutput.ptr, cast _swapChain.ptr.addressOf());
     }
