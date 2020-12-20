@@ -84,6 +84,16 @@ extern class NativeIDXGIFactory extends NativeIUnknown
 class DxgiFactory1 extends DxgiFactory
 {
     public static final uuid : cpp.Struct<GUID> = NativeIDXGIFactory1.uuid();
+
+    public function isCurrent()
+    {
+        return (cast ptr : Star<NativeIDXGIFactory1>).isCurrent();
+    }
+
+    public function enumAdapters1(_adapterIdx : Int, _adapter : DxgiAdapter1) : DxgiError
+    {
+        return (cast ptr : Star<NativeIDXGIFactory1>).enumAdapters1(_adapterIdx, cast _adapter.ptr.addressOf());
+    }
 }
 
 @:keep
@@ -97,6 +107,10 @@ extern class NativeIDXGIFactory1 extends NativeIDXGIFactory
     {
         return untyped __cpp__('__uuidof(IDXGIFactory1)');
     }
+
+    function isCurrent() : Bool;
+
+    public function enumAdapters1(_adapter : Int, _ppAdapter : cpp.Star<cpp.Star<NativeIDXGIAdapter1>>) : Int;
 }
 
 /**
