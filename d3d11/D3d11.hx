@@ -78,6 +78,11 @@ class D3d11
 
         return result;
     }
+
+    public static function calcSubresource(_mipSlice : Int, _arraySlice : Int, _mipLevels : Int)
+    {
+        return NativeD3D11.calcSubresource(_mipSlice, _arraySlice, _mipLevels);
+    }
 }
 
 @:keep
@@ -99,4 +104,7 @@ extern class NativeD3D11
         _featureLevel : Star<NativeD3DFeatureLevel>,
         _immediateContext : Star<Star<NativeID3D11DeviceContext>>
     ) : Int;
+
+    @:native('D3D11CalcSubresource')
+    static function calcSubresource(_mipSlice : cpp.UInt32, _arraySlice : cpp.UInt32, _mipLevels : cpp.UInt32) : cpp.UInt32;
 }

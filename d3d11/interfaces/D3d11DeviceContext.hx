@@ -1,5 +1,8 @@
 package d3d11.interfaces;
 
+import haxe.io.BytesData;
+import d3d11.interfaces.D3d11Device.NativeID3D11Device;
+import haxe.io.Bytes;
 import cpp.utils.VarPointer;
 import cpp.RawPointer;
 import cpp.Pointer;
@@ -21,6 +24,7 @@ import d3d11.interfaces.D3d11DepthStencilState;
 import d3d11.interfaces.D3d11DepthStencilView;
 import d3d11.interfaces.D3d11RenderTargetView;
 import d3d11.interfaces.D3d11Resourse;
+import d3d11.structures.D3d11Box;
 import d3d11.structures.D3d11Rect;
 import d3d11.structures.D3d11Viewport;
 import d3d11.structures.D3d11MappedSubResource;
@@ -84,6 +88,26 @@ class D3d11DeviceContext extends Unknown
     public function unmap(_resource : D3d11Resource, _subresource : Int)
     {
         (cast ptr : Star<NativeID3D11DeviceContext>).unmap(cast _resource.ptr, _subresource);
+    }
+
+    /**
+     * The CPU copies data from memory to a subresource created in non-mappable memory.
+     * @param _resource A pointer to the destination resource (see ID3D11Resource).
+     * @param _dstSubresource A zero-based index, that identifies the destination subresource. See D3D11CalcSubresource for more details.
+     * @param _box A pointer to a box that defines the portion of the destination subresource to copy the resource data into.
+     * Coordinates are in bytes for buffers and in texels for textures.
+     * If NULL, the data is written to the destination subresource with no offset. The dimensions of the source must fit the destination (see D3D11_BOX).
+     * An empty box results in a no-op. A box is empty if the top value is greater than or equal to the bottom value, or the left value is greater than or equal to the right value,
+     * or the front value is greater than or equal to the back value. When the box is empty, UpdateSubresource doesn't perform an update operation.
+     * @param _srcData A pointer to the source data in memory.
+     * @param _srcRowPitch The size of one row of the source data.
+     * @param _srcDepthPitch The size of one depth slice of source data.
+     */
+    public function updateSubresource(_resource : D3d11Resource, _dstSubresource : Int, _box : Null<D3d11Box>, _srcData : BytesData, _srcRowPitch : Int, _srcDepthPitch : Int)
+    {
+        final buffer = (Pointer.arrayElem(_srcData, 0).reinterpret() : Pointer<cpp.Void>).ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).updateSubresource(cast _resource.ptr, _dstSubresource, if (_box == null) null else cast _box.backing, buffer, _srcRowPitch, _srcDepthPitch);
     }
 
     /**
@@ -455,6 +479,9 @@ extern class NativeID3D11DeviceContext extends NativeIUnknown
 
     @:native('Unmap')
     function unmap(_resource : Star<NativeID3D11Resource>, _subresource : cpp.UInt32) : Void;
+
+    @:native('UpdateSubresource')
+    function updateSubresource(_resource : Star<NativeID3D11Resource>, _dstSubresource : cpp.UInt32, _dstBox : Star<NativeD3D11Box>, _srcData : Star<cpp.Void>, _srcRowPitch : cpp.UInt32, _srcDepthPitch : cpp.UInt32) : Void;
 
     @:native('ClearRenderTargetView')
     function clearRenderTargetView(_view : Star<NativeID3D11RenderTargetView>, _color : Star<cpp.Float32>) : Void;
