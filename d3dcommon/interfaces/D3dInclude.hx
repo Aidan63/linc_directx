@@ -3,7 +3,7 @@ package d3dcommon.interfaces;
 import cpp.Star;
 import cpp.Pointer;
 import cpp.ConstPointer;
-import cpp.utils.VarConstCharStar;
+import cpp.ConstCharStar;
 import com.Unknown;
 import com.LPCVOID;
 import d3dcommon.enumerations.D3dIncludeType;
@@ -55,7 +55,7 @@ class D3dInclude extends Unknown
 extern class NativeID3DInclude extends NativeIUnknown
 {
     @:native('Open')
-    function open(_includeType : NativeD3DIncludeType, _filename : VarConstCharStar, _parentData : Star<cpp.Void>, _data : Star<LPCVOID>, _bytes : Star<cpp.UInt32>) : cpp.UInt32;
+    function open(_includeType : NativeD3DIncludeType, _filename : ConstCharStar, _parentData : Star<cpp.Void>, _data : Star<LPCVOID>, _bytes : Star<cpp.UInt32>) : cpp.UInt32;
 
     @:native('Close')
     function close(_data : Star<cpp.Void>) : cpp.UInt32;

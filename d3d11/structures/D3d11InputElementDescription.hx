@@ -3,8 +3,8 @@ package d3d11.structures;
 import cpp.Star;
 import cpp.Pointer;
 import cpp.Function;
+import cpp.ConstCharStar;
 import cpp.vm.Gc;
-import cpp.utils.VarConstCharStar;
 import dxgi.enumerations.DxgiFormat;
 import d3d11.enumerations.D3d11InputClassification;
 
@@ -128,7 +128,7 @@ extern class NativeD3D11InputElementDescription
     static function createRef() : NativeD3D11InputElementDescription;
 
     @:native('SemanticName')
-    var semanticName : VarConstCharStar;
+    var semanticName : ConstCharStar;
 
     @:native('SemanticIndex')
     var semanticIndex : cpp.UInt32;

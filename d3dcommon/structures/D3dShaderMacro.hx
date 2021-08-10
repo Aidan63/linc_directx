@@ -3,8 +3,8 @@ package d3dcommon.structures;
 import cpp.Star;
 import cpp.Pointer;
 import cpp.Function;
+import cpp.ConstCharStar;
 import cpp.vm.Gc;
-import cpp.utils.VarConstCharStar;
 
 /**
  * Defines a shader macro.
@@ -66,8 +66,8 @@ extern class NativeD3DShaderMacro
     static function createRef() : NativeD3DShaderMacro;
 
     @:native('Name')
-    var name : VarConstCharStar;
+    var name : ConstCharStar;
 
     @:native('Definition')
-    var definition : VarConstCharStar;
+    var definition : ConstCharStar;
 }
