@@ -1,8 +1,6 @@
 package d3d11.interfaces;
 
 import haxe.io.BytesData;
-import d3d11.interfaces.D3d11Device.NativeID3D11Device;
-import haxe.io.Bytes;
 import cpp.utils.VarPointer;
 import cpp.RawPointer;
 import cpp.Pointer;
@@ -392,6 +390,18 @@ class D3d11DeviceContext extends Unknown
     }
 
     /**
+     * Sets the constant buffer used by the vertex shader pipeline stage.
+     * @param _startSlot Index into the device's zero-based array to begin setting constant buffers to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffer Constant buffer (see `ID3D11Buffer`) being given to the device.
+     */
+    public function vsSetConstantBuffer(_slot : Int, _buffer : D3d11Buffer)
+    {
+        vectorBuffer[0] = cast _buffer.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).vsSetConstantBuffers(_slot, 1, vectorBuffer.data());
+    }
+
+    /**
      * Sets a pixel shader to the device.
      * @param _pixelShader Pointer to a pixel shader (see ID3D11PixelShader). Passing in NULL disables the shader for this pipeline stage.
      * @param _classInstances A pointer to an array of class-instance interfaces (see `ID3D11ClassInstance`).
@@ -432,6 +442,18 @@ class D3d11DeviceContext extends Unknown
     }
 
     /**
+     * Sets the constant buffers used by the pixel shader pipeline stage.
+     * @param _slot Index into the device's zero-based array to set the constant buffer to (ranges from 0 to `D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT` - 1).
+     * @param _buffer constant buffer (see `ID3D11Buffer`) being given to the device.
+     */
+    public function psSetConstantBuffer(_slot : Int, _buffer : D3d11Buffer)
+    {
+        vectorBuffer[0] = cast _buffer.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).psSetConstantBuffers(_slot, 1, vectorBuffer.data());
+    }
+
+    /**
      * Set an array of sampler states to the pixel shader pipeline stage.
      * @param _startSlot Index into the device's zero-based array to begin setting samplers to (ranges from 0 to `D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT` - 1).
      * @param _samplers Number of samplers in the array. Each pipeline stage has a total of 16 sampler slots available (ranges from 0 to `D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT` - StartSlot).
@@ -447,6 +469,18 @@ class D3d11DeviceContext extends Unknown
     }
 
     /**
+     * Set a sampler states to the pixel shader pipeline stage.
+     * @param _startSlot Index into the device's zero-based array to set the sampler to (ranges from 0 to `D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT` - 1).
+     * @param _samplers Sampler object.
+     */
+    public function psSetSampler(_slot : Int, _sampler : D3d11SamplerState)
+    {
+        vectorSamplerState[0] = cast _sampler.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).psSetSamplers(_slot, 1, vectorSamplerState.data());
+    }
+
+    /**
      * Bind an array of shader resources to the pixel shader stage.
      * @param _startSlot Index into the device's zero-based array to begin setting shader resources to (ranges from 0 to `D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT` - 1).
      * @param _shaderResourceViews Array of shader resource view interfaces to set to the device.
@@ -459,6 +493,18 @@ class D3d11DeviceContext extends Unknown
         }
 
         (cast ptr : Star<NativeID3D11DeviceContext>).psSetShaderResources(_startSlot, _shaderResourceViews.length, vectorShaderResourceView.data());
+    }
+
+    /**
+     * Bind an array of shader resources to the pixel shader stage.
+     * @param _startSlot Index into the device's zero-based array to begin setting shader resources to (ranges from 0 to `D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT` - 1).
+     * @param _shaderResourceViews Array of shader resource view interfaces to set to the device.
+     */
+    public function psSetShaderResource(_slot : Int, _shaderResourceView : D3d11ShaderResourceView)
+    {
+        vectorShaderResourceView[0] = cast _shaderResourceView.ptr;
+
+        (cast ptr : Star<NativeID3D11DeviceContext>).psSetShaderResources(_slot, 1, vectorShaderResourceView.data());
     }
 }
 
