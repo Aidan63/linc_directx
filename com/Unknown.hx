@@ -22,8 +22,6 @@ class Unknown
     public function new()
     {
         ptr = null;
-        
-        Gc.setFinalizer(this, Function.fromStaticFunction(finalize));
     }
 
     /**
@@ -55,18 +53,6 @@ class Unknown
     public function queryInterface(_riid : cpp.Struct<GUID>, _object : Unknown) : Int
     {
         return ptr.queryInterface(_riid, cast _object.ptr.addressOf());
-    }
-
-    /**
-     * Finaliser for our IUnknown wrapper. Will release the reference to the native pointer when the wrapper is collected.
-     * @param _obj Object about to be collected.
-     */
-    @:void static function finalize(_obj : Unknown)
-    {
-        if (_obj.ptr != null)
-        {
-            _obj.release();
-        }
     }
 }
 
