@@ -4,6 +4,7 @@ import cpp.Star;
 import cpp.Pointer;
 import cpp.Function;
 import cpp.vm.Gc;
+import haxe.Int64;
 
 /**
  * The RECT structure defines the coordinates of the upper-left and lower-right corners of a rectangle.
@@ -15,38 +16,38 @@ class D3d11Rect
     /**
      * The x-coordinate of the upper-left corner of the rectangle.
      */
-    public var left (get, set) : Int;
+    public var left (get, set) : Int64;
 
-    inline function get_left() : Int return backing.left;
+    inline function get_left() : Int64 return backing.left;
 
-    inline function set_left(_v : Int) return backing.left = _v;
+    inline function set_left(_v : Int64) return backing.left = _v;
 
     /**
      * The y-coordinate of the upper-left corner of the rectangle.
      */
-    public var top (get, set) : Int;
+    public var top (get, set) : Int64;
 
-    inline function get_top() : Int return backing.top;
+    inline function get_top() : Int64 return backing.top;
 
-    inline function set_top(_v : Int) return backing.top = _v;
+    inline function set_top(_v : Int64) return backing.top = _v;
 
     /**
      * The x-coordinate of the lower-right corner of the rectangle.
      */
-    public var right (get, set) : Int;
+    public var right (get, set) : Int64;
 
-    inline function get_right() : Int return backing.right;
+    inline function get_right() : Int64 return backing.right;
 
-    inline function set_right(_v : Int) return backing.right = _v;
+    inline function set_right(_v : Int64) return backing.right = _v;
 
     /**
      * The y-coordinate of the lower-right corner of the rectangle.
      */
-    public var bottom (get, set) : Int;
+    public var bottom (get, set) : Int64;
 
-    inline function get_bottom() : Int return backing.bottom;
+    inline function get_bottom() : Int64 return backing.bottom;
 
-    inline function set_bottom(_v : Int) return backing.bottom = _v;
+    inline function set_bottom(_v : Int64) return backing.bottom = _v;
 
     public function new(_existing : Pointer<NativeD3D11Rect> = null)
     {
