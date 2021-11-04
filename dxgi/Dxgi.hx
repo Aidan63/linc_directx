@@ -7,8 +7,8 @@ import dxgi.constants.DxgiError;
 
 using cpp.Native;
 
-@:headerCode('#include <dxgi.h>
-#include <dxgi1_3.h>')
+@:headerInclude('dxgi.h')
+@:headerInclude('dxgi1_3.h')
 class Dxgi
 {
     /**
